@@ -1,4 +1,4 @@
-import { DiceSymbol } from '@/dice/dice.interface'
+import { DiceSymbol } from '@/game/dice/dice.interface'
 
 export interface CharacterCard {
   id: string

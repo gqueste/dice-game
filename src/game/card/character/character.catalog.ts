@@ -1,4 +1,4 @@
-import { DiceSymbol } from '@/dice/dice.interface'
+import { DiceSymbol } from '@/game/dice/dice.interface'
 import { type CharacterCard, EffectType, Level } from './character.interface'
 
 export const defaultAttackCharacter: Partial<CharacterCard> = {
