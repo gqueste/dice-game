@@ -1,10 +1,15 @@
+import { defaultDice } from './dice/dice.catalog'
+import { rollDice } from './dice/dice.utils'
 import './style.css'
-import { setupCounter } from './counter.ts'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
-    coucou
+    ${rollDice(defaultDice)}
+    ${rollDice(defaultDice)}
+    ${rollDice(defaultDice)}
+    ${rollDice(defaultDice)}
+    ${rollDice(defaultDice)}
+    ${rollDice(defaultDice)}
+    ${rollDice(defaultDice)}
   </div>
 `
-
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
