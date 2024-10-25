@@ -1,4 +1,4 @@
-import { Dice, DiceSymbol } from './dice.interface'
+import { type Dice, DiceSymbol } from './dice.interface'
 
 export const rollDice = (dice: Dice): DiceSymbol => {
   const randomValue = Math.floor(Math.random() * 6)

@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from 'vitest'
-import { Dice, DiceSymbol } from './dice.interface'
+import { type Dice, DiceSymbol } from './dice.interface'
 import { rollDice, rollDices } from './dice.utils'
 
 const testDice: Dice = {
