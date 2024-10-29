@@ -1,8 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { defaultAttackCharacter } from './game/card/character/character.catalog'
+import CharacterCard from './ui/CharacterCard.vue'
+</script>
 
 <template>
   <header>
-    <div class="wrapper"></div>
+    <div class="wrapper">
+      <CharacterCard :character="defaultAttackCharacter" />
+    </div>
   </header>
 
   <main></main>

@@ -1,12 +1,13 @@
 import { DiceSymbol } from '@/game/dice/dice.interface'
 
-export interface CharacterCard {
+export interface Character {
   id: string
   price: number
   name: string
   currentLevel: Level
   levels: {
     [key in Level]?: {
+      level: Level
       levelUpCost: number
       skill: CharacterSkill
     }
