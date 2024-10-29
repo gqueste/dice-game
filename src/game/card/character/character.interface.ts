@@ -30,4 +30,6 @@ export interface CharacterSkill {
 
 export enum EffectType {
   AddAttack = 'addAttack',
+  AddGold = 'addGold',
+  AddMagic = 'addMagic',
 }

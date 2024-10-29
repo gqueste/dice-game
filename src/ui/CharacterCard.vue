@@ -6,21 +6,22 @@
     </div>
     <div class="illustration"></div>
     <div v-for="level in character.levels" class="level" :key="level?.level">
-      <div class="current-level-check"></div>
+      <div class="current-level-check">{{ level?.levelUpCost }}</div>
       <div v-for="(requiredDice, index) in level?.skill.cost" :key="index" class="required-dice">
         <component :is="diceSymbolToComponent(requiredDice)" />
       </div>
-      <div class="effect">{{ level?.skill.effect.value }} {{ level?.skill.effect.type }}</div>
-      <div v-if="level?.levelUpCost" class="level-up-cost">
-        {{ level?.levelUpCost }} <ArrowBigDown />
+      <div class="effect">
+        {{ level?.skill.effect.value }}
+        <component :is="effectTypeToComponent(level!.skill.effect.type)" />
       </div>
     </div>
+    <div class="footer"><ArrowBigDown />Expérience<ArrowBigDown /></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Character } from '@/game/card/character/character.interface'
-import { diceSymbolToComponent } from './utils'
+import { diceSymbolToComponent, effectTypeToComponent } from './utils'
 import { ArrowBigDown } from 'lucide-vue-next'
 
 defineProps<{ character: Character }>()
@@ -31,9 +32,10 @@ defineProps<{ character: Character }>()
   border: 1px solid black;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 200px;
   height: 300px;
-  gap: 10px;
+  padding: 8px;
 
   .header {
     width: 100%;
@@ -45,8 +47,8 @@ defineProps<{ character: Character }>()
     .price {
       border: 2px solid yellow;
       border-radius: 50%;
-      width: 16px;
-      height: 16px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -63,18 +65,42 @@ defineProps<{ character: Character }>()
   .level {
     display: flex;
     flex-wrap: nowrap;
-    justify-content: space-between;
+    gap: 12px;
     align-items: center;
+    padding: 0 8px;
 
     .current-level-check {
       border: 1px solid black;
-      width: 10px;
-      height: 10px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin-right: 12px;
     }
 
     .required-dice {
       border: 1px solid grey;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
+    .effect {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .footer {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    align-self: flex-end;
   }
 }
 </style>
