@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import {
-  defaultAttackCharacter,
-  defaultMagicCharacter,
-  defaultMarketCharacter,
-} from './game/card/character/character.catalog'
+import { defaultAttackCharacter } from './game/card/character/catalog/default/character-default-attack'
+import { defaultGoldCharacter } from './game/card/character/catalog/default/character-default-gold'
+import { defaultMagicCharacter } from './game/card/character/catalog/default/character-default-magic'
 import CharacterCard from './ui/CharacterCard.vue'
 </script>
 
@@ -11,7 +9,7 @@ import CharacterCard from './ui/CharacterCard.vue'
   <header>
     <div class="wrapper">
       <CharacterCard :character="defaultAttackCharacter" />
-      <CharacterCard :character="defaultMarketCharacter" />
+      <CharacterCard :character="defaultGoldCharacter" />
       <CharacterCard :character="defaultMagicCharacter" />
     </div>
   </header>
