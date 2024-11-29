@@ -5,7 +5,6 @@ export interface Dice {
 
 export enum DiceSymbol {
   Blank = 'blank',
-
   Attack = 'attack',
   Gold = 'gold',
   Magic = 'magic',

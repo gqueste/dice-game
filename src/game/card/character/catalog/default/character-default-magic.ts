@@ -1,6 +1,7 @@
 import { DiceSymbol } from '@/game/dice/dice.interface'
-import { type Character, EffectType, Level } from '@/game/card/character/character.interface'
+import { type Character, Level } from '@/game/card/character/character.interface'
 import { v4 as uuid } from 'uuid'
+import { EffectType } from '@/game/card/card.interface'
 
 export const defaultMagicCharacter: Character = {
   id: uuid(),

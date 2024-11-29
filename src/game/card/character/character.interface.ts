@@ -1,4 +1,5 @@
 import { DiceSymbol } from '@/game/dice/dice.interface'
+import type { EffectType } from '../card.interface'
 
 export interface Character {
   id: string
@@ -26,10 +27,4 @@ export interface CharacterSkill {
     type: EffectType
     value: number
   }
-}
-
-export enum EffectType {
-  AddAttack = 'addAttack',
-  AddGold = 'addGold',
-  AddMagic = 'addMagic',
 }

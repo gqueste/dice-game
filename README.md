@@ -8,7 +8,9 @@
 
 ## TODO
 
-- display user card
+- continue display monster card
+  - Age sur 1 colonne dans header et label + cost dans une autre colonne
+- define event card
 - define player
 - instantiate player
 - define event card
