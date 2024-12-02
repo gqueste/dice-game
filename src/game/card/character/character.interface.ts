@@ -1,9 +1,11 @@
 import { DiceSymbol } from '@/game/dice/dice.interface'
 import type { EffectType } from '../card.interface'
+import type { Age } from '@/game/game.interface'
 
 export interface Character {
   id: string
-  price: number
+  age: Age
+  cost: DiceSymbol[]
   name: string
   currentLevel: Level
   levels: {

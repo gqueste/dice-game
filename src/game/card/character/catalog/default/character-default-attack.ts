@@ -2,12 +2,14 @@ import { DiceSymbol } from '@/game/dice/dice.interface'
 import { type Character, Level } from '@/game/card/character/character.interface'
 import { v4 as uuid } from 'uuid'
 import { EffectType } from '@/game/card/card.interface'
+import { Age } from '@/game/game.interface'
 
 export const defaultAttackCharacter: Character = {
   id: uuid(),
+  age: Age.Start,
   name: 'Chasseur',
   currentLevel: Level.Level1,
-  price: 0,
+  cost: [],
   levels: {
     [Level.Level1]: {
       level: Level.Level1,

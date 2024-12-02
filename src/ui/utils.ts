@@ -41,5 +41,7 @@ export const ageToLabel = (age: Age): string => {
       return 'II'
     case Age.Third:
       return 'III'
+    case Age.Start:
+      return 'D'
   }
 }

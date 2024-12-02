@@ -1,11 +1,5 @@
 <template>
-  <PlayableCard>
-    <template v-slot:header>
-      <div class="header">
-        <div class="price">{{ character.price }}</div>
-        <div class="name">{{ character.name }}</div>
-      </div>
-    </template>
+  <PlayableCard :age="character.age" :name="character.name" :cost="character.cost">
     <template v-slot:body>
       <div v-for="level in character.levels" class="level" :key="level?.level">
         <div class="current-level-check">{{ level?.levelUpCost }}</div>
@@ -34,24 +28,6 @@ defineProps<{ character: Character }>()
 </script>
 
 <style lang="scss" scoped>
-.header {
-  width: 100%;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 8px;
-
-  .price {
-    border: 2px solid yellow;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
 .level {
   display: flex;
   flex-wrap: nowrap;
