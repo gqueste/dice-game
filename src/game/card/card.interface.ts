@@ -6,3 +6,8 @@ export enum EffectType {
   RemoveGold = 'removeGold',
   RemoveMagic = 'removeMagic',
 }
+
+export interface CardEffect {
+  type: EffectType
+  value: number
+}

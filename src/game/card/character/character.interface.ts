@@ -1,5 +1,5 @@
 import { DiceSymbol } from '@/game/dice/dice.interface'
-import type { EffectType } from '../card.interface'
+import type { CardEffect } from '../card.interface'
 import type { Age } from '@/game/game.interface'
 
 export interface Character {
@@ -25,8 +25,5 @@ export enum Level {
 
 export interface CharacterSkill {
   cost: DiceSymbol[]
-  effect: {
-    type: EffectType
-    value: number
-  }
+  effect: CardEffect
 }

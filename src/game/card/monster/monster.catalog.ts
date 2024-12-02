@@ -11,7 +11,7 @@ export const rabbit: Monster = {
   age: Age.First,
   experience: 2,
   buyEffect: {
-    effect: EffectType.AddGold,
+    type: EffectType.AddGold,
     value: 1,
   },
 }
@@ -23,8 +23,8 @@ export const ghost: Monster = {
   age: Age.First,
   experience: 5,
   riverEffect: {
-    effect: EffectType.RemoveAttack,
-    value: 1,
+    type: EffectType.RemoveAttack,
+    value: -1,
   },
 }
 
@@ -35,12 +35,12 @@ export const thief: Monster = {
   age: Age.First,
   experience: 5,
   appearEffect: {
-    effect: EffectType.RemoveGold,
-    value: 1,
+    type: EffectType.RemoveGold,
+    value: -1,
   },
   riverEffect: {
-    effect: EffectType.RemoveGold,
-    value: 1,
+    type: EffectType.RemoveGold,
+    value: -1,
   },
 }
 
@@ -59,15 +59,15 @@ export const dragon: Monster = {
   age: Age.Third,
   experience: 40,
   riverEffect: {
-    effect: EffectType.RemoveGold,
-    value: 5,
+    type: EffectType.RemoveGold,
+    value: -5,
   },
   appearEffect: {
-    effect: EffectType.RemoveMagic,
-    value: 5,
+    type: EffectType.RemoveMagic,
+    value: -5,
   },
   buyEffect: {
-    effect: EffectType.AddGold,
+    type: EffectType.AddGold,
     value: 5,
   },
 }

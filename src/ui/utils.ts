@@ -1,9 +1,6 @@
 import { DiceSymbol } from '@/game/dice/dice.interface'
 import { CircleDollarSign, Sparkles, Swords, X } from 'lucide-vue-next'
 import { type Component } from 'vue'
-import AddAttack from './symbols/AddAttack.vue'
-import AddGold from './symbols/AddGold.vue'
-import AddMagic from './symbols/AddMagic.vue'
 import { EffectType } from '@/game/card/card.interface'
 import { Age } from '@/game/game.interface'
 
@@ -23,13 +20,19 @@ export const diceSymbolToComponent = (diceSymbol: DiceSymbol): Component => {
 export const effectTypeToComponent = (effectType: EffectType): Component => {
   switch (effectType) {
     case EffectType.AddAttack:
-      return AddAttack
+      return diceSymbolToComponent(DiceSymbol.Attack)
     case EffectType.AddGold:
-      return AddGold
+      return diceSymbolToComponent(DiceSymbol.Gold)
     case EffectType.AddMagic:
-      return AddMagic
+      return diceSymbolToComponent(DiceSymbol.Magic)
+    case EffectType.RemoveAttack:
+      return diceSymbolToComponent(DiceSymbol.Attack)
+    case EffectType.RemoveGold:
+      return diceSymbolToComponent(DiceSymbol.Gold)
+    case EffectType.RemoveMagic:
+      return diceSymbolToComponent(DiceSymbol.Magic)
     default:
-      return AddAttack
+      return diceSymbolToComponent(DiceSymbol.Attack)
   }
 }
 
