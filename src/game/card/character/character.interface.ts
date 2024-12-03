@@ -1,12 +1,7 @@
 import { DiceSymbol } from '@/game/dice/dice.interface'
-import type { CardEffect } from '../card.interface'
-import type { Age } from '@/game/game.interface'
+import type { CardEffect, PlayableCard } from '../card.interface'
 
-export interface Character {
-  id: string
-  age: Age
-  cost: DiceSymbol[]
-  name: string
+export interface Character extends PlayableCard {
   currentLevel: Level
   levels: {
     [key in Level]?: {

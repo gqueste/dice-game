@@ -1,12 +1,6 @@
-import type { DiceSymbol } from '@/game/dice/dice.interface'
-import type { Age } from '@/game/game.interface'
-import type { CardEffect } from '../card.interface'
+import type { CardEffect, PlayableCard } from '../card.interface'
 
-export interface Monster {
-  id: string
-  age: Age
-  name: string
-  cost: DiceSymbol[]
+export interface Monster extends PlayableCard {
   experience: number
   appearEffect?: CardEffect
   riverEffect?: CardEffect
