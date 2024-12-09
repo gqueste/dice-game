@@ -10,7 +10,7 @@ export const rabbit: Monster = {
   cost: [DiceSymbol.Attack],
   age: Age.First,
   experience: 2,
-  buyEffect: {
+  killEffect: {
     type: EffectType.AddGold,
     value: 1,
   },
@@ -66,7 +66,7 @@ export const dragon: Monster = {
     type: EffectType.RemoveMagic,
     value: -5,
   },
-  buyEffect: {
+  killEffect: {
     type: EffectType.AddGold,
     value: 5,
   },

@@ -60,8 +60,8 @@ const formattedCost = computed<{ [key: string]: DiceSymbol[] }>(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 200px;
-  height: 300px;
+  width: 250px;
+  height: 400px;
   padding: 8px;
 
   .header {

@@ -8,6 +8,7 @@ export enum EffectType {
   RemoveAttack = 'removeAttack',
   RemoveGold = 'removeGold',
   RemoveMagic = 'removeMagic',
+  AddDefaultDice = 'addDefaultDice',
 }
 
 export interface CardEffect {
@@ -20,4 +21,11 @@ export interface PlayableCard {
   age: Age
   name: string
   cost: DiceSymbol[]
+}
+
+export interface RiverCard extends PlayableCard {
+  appearEffect?: CardEffect
+  riverEffect?: CardEffect
+  buyEffect?: CardEffect
+  killEffect?: CardEffect
 }

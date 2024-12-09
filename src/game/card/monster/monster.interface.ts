@@ -1,8 +1,5 @@
-import type { CardEffect, PlayableCard } from '../card.interface'
+import type { RiverCard } from '../card.interface'
 
-export interface Monster extends PlayableCard {
+export interface Monster extends RiverCard {
   experience: number
-  appearEffect?: CardEffect
-  riverEffect?: CardEffect
-  buyEffect?: CardEffect
 }

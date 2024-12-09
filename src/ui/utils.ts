@@ -1,5 +1,5 @@
 import { DiceSymbol } from '@/game/dice/dice.interface'
-import { CircleDollarSign, Sparkles, Swords, X } from 'lucide-vue-next'
+import { Box, CircleDollarSign, Sparkles, Swords, X } from 'lucide-vue-next'
 import { type Component } from 'vue'
 import { EffectType } from '@/game/card/card.interface'
 import { Age } from '@/game/game.interface'
@@ -31,6 +31,8 @@ export const effectTypeToComponent = (effectType: EffectType): Component => {
       return diceSymbolToComponent(DiceSymbol.Gold)
     case EffectType.RemoveMagic:
       return diceSymbolToComponent(DiceSymbol.Magic)
+    case EffectType.AddDefaultDice:
+      return Box
     default:
       return diceSymbolToComponent(DiceSymbol.Attack)
   }

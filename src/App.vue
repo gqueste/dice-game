@@ -5,6 +5,8 @@ import { defaultMagicCharacter } from './game/card/character/catalog/default/cha
 import { rabbit, ghost, thief, dragon } from '@/game/card/monster/monster.catalog'
 import CharacterCard from './ui/CharacterCard.vue'
 import MonsterCard from './ui/MonsterCard.vue'
+import EventCard from './ui/EventCard.vue'
+import { allEvents } from './game/card/event/event.catalog'
 </script>
 
 <template>
@@ -19,6 +21,9 @@ import MonsterCard from './ui/MonsterCard.vue'
       <MonsterCard :monster="ghost" />
       <MonsterCard :monster="thief" />
       <MonsterCard :monster="dragon" />
+    </div>
+    <div class="wrapper">
+      <EventCard v-for="event in allEvents" :event="event" :key="event.id" />
     </div>
   </main>
 </template>
@@ -38,5 +43,6 @@ header {
   align-items: center;
   gap: 1em;
   padding: 1em 0;
+  flex-wrap: wrap;
 }
 </style>
