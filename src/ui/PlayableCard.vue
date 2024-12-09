@@ -13,7 +13,9 @@
       </div>
     </div>
     <div class="illustration"></div>
-    <slot name="body"></slot>
+    <div class="body">
+      <slot name="body"></slot>
+    </div>
     <slot name="footer"></slot>
   </div>
 </template>
@@ -102,6 +104,13 @@ const formattedCost = computed<{ [key: string]: DiceSymbol[] }>(() => {
     width: 100px;
     height: 100px;
     align-self: center;
+  }
+
+  .body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
   }
 }
 </style>
