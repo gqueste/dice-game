@@ -4,6 +4,8 @@ import { type Component } from 'vue'
 import { EffectType } from '@/game/card/card.interface'
 import { Age } from '@/game/game.interface'
 import AddAttackDice from './effectTypes/AddAttackDice.vue'
+import AddGoldDice from './effectTypes/AddGoldDice.vue'
+import AddMagicDice from './effectTypes/AddMagicDice.vue'
 
 export const diceSymbolToComponent = (diceSymbol: DiceSymbol): Component => {
   switch (diceSymbol) {
@@ -36,6 +38,10 @@ export const effectTypeToComponent = (effectType: EffectType): Component => {
       return Box
     case EffectType.AddAttackDice:
       return AddAttackDice
+    case EffectType.AddGoldDice:
+      return AddGoldDice
+    case EffectType.AddMagicDice:
+      return AddMagicDice
     default:
       return diceSymbolToComponent(DiceSymbol.Attack)
   }

@@ -148,12 +148,56 @@ export const buyAttackDiceGold: Event = {
 }
 
 export const buyAttackDiceMagic: Event = {
-  id: 'buyAttackDiceGold',
+  id: 'buyAttackDiceMagic',
   name: 'XXX',
   cost: [DiceSymbol.Attack, DiceSymbol.Attack, DiceSymbol.Magic],
   age: Age.First,
   buyEffect: {
     type: EffectType.AddAttackDice,
+    value: 1,
+  },
+}
+
+export const buyGoldDiceAttack: Event = {
+  id: 'buyGoldDiceAttack',
+  name: 'XXX',
+  cost: [DiceSymbol.Gold, DiceSymbol.Gold, DiceSymbol.Attack],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddGoldDice,
+    value: 1,
+  },
+}
+
+export const buyGoldDiceMagic: Event = {
+  id: 'buyGoldDiceMagic',
+  name: 'XXX',
+  cost: [DiceSymbol.Gold, DiceSymbol.Gold, DiceSymbol.Magic],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddGoldDice,
+    value: 1,
+  },
+}
+
+export const buyMagicDiceAttack: Event = {
+  id: 'buyMagicDiceAttack',
+  name: 'XXX',
+  cost: [DiceSymbol.Magic, DiceSymbol.Magic, DiceSymbol.Attack],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddMagicDice,
+    value: 1,
+  },
+}
+
+export const buyMagicDiceGold: Event = {
+  id: 'buyMagicDiceGold',
+  name: 'XXX',
+  cost: [DiceSymbol.Magic, DiceSymbol.Magic, DiceSymbol.Gold],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddMagicDice,
     value: 1,
   },
 }
@@ -182,4 +226,8 @@ export const allEvents = [
   convertMagicToGold,
   buyAttackDiceGold,
   buyAttackDiceMagic,
+  buyGoldDiceAttack,
+  buyGoldDiceMagic,
+  buyMagicDiceAttack,
+  buyMagicDiceGold,
 ]
