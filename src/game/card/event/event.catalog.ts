@@ -70,14 +70,100 @@ export const goldMagicToDefault: Event = {
   },
 }
 
+export const convertAttackToGold: Event = {
+  id: 'convertAttackToGold',
+  name: 'XXX',
+  cost: [DiceSymbol.Attack, DiceSymbol.Attack],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddGold,
+    value: 1,
+  },
+}
+
+export const convertAttackToMagic: Event = {
+  id: 'convertAttackToMagic',
+  name: 'XXX',
+  cost: [DiceSymbol.Attack, DiceSymbol.Attack],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddMagic,
+    value: 1,
+  },
+}
+
+export const convertGoldToAttack: Event = {
+  id: 'convertGoldToAttack',
+  name: 'XXX',
+  cost: [DiceSymbol.Gold, DiceSymbol.Gold],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddAttack,
+    value: 1,
+  },
+}
+
+export const convertGoldToMagic: Event = {
+  id: 'convertGoldToMagic',
+  name: 'XXX',
+  cost: [DiceSymbol.Gold, DiceSymbol.Gold],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddMagic,
+    value: 1,
+  },
+}
+
+export const convertMagicToAttack: Event = {
+  id: 'convertMagicToAttack',
+  name: 'XXX',
+  cost: [DiceSymbol.Magic, DiceSymbol.Magic],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddAttack,
+    value: 1,
+  },
+}
+
+export const convertMagicToGold: Event = {
+  id: 'convertMagicToGold',
+  name: 'XXX',
+  cost: [DiceSymbol.Magic, DiceSymbol.Magic],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddGold,
+    value: 1,
+  },
+}
+
+export const buyAttackDiceGold: Event = {
+  id: 'buyAttackDiceGold',
+  name: 'XXX',
+  cost: [DiceSymbol.Attack, DiceSymbol.Attack, DiceSymbol.Gold],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddAttackDice,
+    value: 1,
+  },
+}
+
+export const buyAttackDiceMagic: Event = {
+  id: 'buyAttackDiceGold',
+  name: 'XXX',
+  cost: [DiceSymbol.Attack, DiceSymbol.Attack, DiceSymbol.Magic],
+  age: Age.First,
+  buyEffect: {
+    type: EffectType.AddAttackDice,
+    value: 1,
+  },
+}
+
 //TODO Add an event card for all conversion
 // Attack -> Gold Dice
 // Attack -> Magic Dice
 // Attack -> Attack Dice
 
 // events to buy attack and attacker dice
-
-// events to add momentary dices
 
 // Buy card to get more space in player stash
 
@@ -88,4 +174,12 @@ export const allEvents = [
   attackGoldToDefault,
   attackMagicToDefault,
   goldMagicToDefault,
+  convertAttackToGold,
+  convertAttackToMagic,
+  convertGoldToAttack,
+  convertGoldToMagic,
+  convertMagicToAttack,
+  convertMagicToGold,
+  buyAttackDiceGold,
+  buyAttackDiceMagic,
 ]

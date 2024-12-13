@@ -9,6 +9,7 @@ export enum EffectType {
   RemoveGold = 'removeGold',
   RemoveMagic = 'removeMagic',
   AddDefaultDice = 'addDefaultDice',
+  AddAttackDice = 'addAttackDice',
 }
 
 export interface CardEffect {
