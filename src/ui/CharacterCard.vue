@@ -1,7 +1,12 @@
 <template>
   <PlayableCard :age="character.age" :name="character.name" :cost="character.cost">
     <template v-slot:body>
-      <div v-for="level in character.levels" class="level" :key="level?.level">
+      <div
+        v-for="level in character.levels"
+        class="level"
+        :class="{ 'is-current-level': level?.level === character.currentLevel }"
+        :key="level?.level"
+      >
         <div class="current-level-check">{{ level?.levelUpCost }}</div>
         <div v-for="(requiredDice, index) in level?.skill.cost" :key="index" class="required-dice">
           <component :is="diceSymbolToComponent(requiredDice)" />
@@ -67,5 +72,11 @@ defineProps<{ character: Character }>()
   justify-content: space-between;
   align-items: center;
   align-self: flex-end;
+}
+
+.is-current-level {
+  border: 1px solid red;
+  border-radius: 4px;
+  padding: 8px;
 }
 </style>
