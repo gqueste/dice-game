@@ -8,6 +8,9 @@
 
 ## TODO
 
+- after roll, highlight cards which can be bought
+- highlight board actions available
+- add total in dice throwing after actions
 - define event card
 - define player
 - instantiate player

@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { Age } from '@/game/game.interface'
 import { ageToLabel, diceSymbolToComponent } from './utils'
-import type { DiceSymbol } from '@/game/dice/dice.interface'
+import type { DiceSymbol } from '@/game/dice/dice.'
 import { computed } from 'vue'
 
 const props = defineProps<{ age: Age; name: string; cost: DiceSymbol[] }>()

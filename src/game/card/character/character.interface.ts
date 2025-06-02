@@ -1,4 +1,4 @@
-import { DiceSymbol } from '@/game/dice/dice.interface'
+import { DiceSymbol } from '@/game/dice/dice.'
 import type { CardEffect, PlayableCard } from '../card.interface'
 
 export interface Character extends PlayableCard {

@@ -1,4 +1,4 @@
-import { DiceSymbol } from '@/game/dice/dice.interface'
+import { DiceSymbol } from '@/game/dice/dice.'
 import { type Character, Level } from '@/game/card/character/character.interface'
 import { v4 as uuid } from 'uuid'
 import { EffectType } from '@/game/card/card.interface'

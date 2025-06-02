@@ -1,4 +1,4 @@
-import { DiceSymbol } from '@/game/dice/dice.interface'
+import { DiceSymbol } from '@/game/dice/dice.'
 import { Box, CircleDollarSign, Sparkles, Swords, X } from 'lucide-vue-next'
 import { type Component } from 'vue'
 import { EffectType } from '@/game/card/card.interface'

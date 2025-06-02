@@ -1,34 +1,17 @@
 <script setup lang="ts">
-import { defaultAttackCharacter } from '@/game/card/character/catalog/default/character-default-attack'
-import { defaultGoldCharacter } from '@/game/card/character/catalog/default/character-default-gold'
-import { defaultMagicCharacter } from '@/game/card/character/catalog/default/character-default-magic'
-import { allEvents } from '@/game/card/event/event.catalog'
-import { defaultDice } from '@/game/dice/dice.catalog'
-import type { Dice } from '@/game/dice/dice.interface'
-import { Age } from '@/game/game.interface'
+import type { Dice } from '@/game/dice/dice.'
 import CharacterCard from '@/ui/CharacterCard.vue'
 import { diceSymbolToComponent } from '@/ui/utils'
 import { computed, ref } from 'vue'
+import { Game } from '@/game/game'
+import EventCard from '@/ui/EventCard.vue'
 
-const DEFAULT_STATE = {
-  players: [
-    {
-      id: 'player0',
-      name: 'Joueur 1',
-      board: [defaultAttackCharacter, defaultGoldCharacter, defaultMagicCharacter],
-      dices: [defaultDice, defaultDice, defaultDice],
-    },
-  ],
-  library: allEvents,
-  currentAge: Age.First,
-}
-
-const boardState = ref(DEFAULT_STATE)
+const boardState = ref(new Game())
 const currentPlayer = ref(boardState.value.players[0])
 
 const onNewGame = () => {
-  boardState.value = DEFAULT_STATE
-  currentPlayer.value = DEFAULT_STATE.players[0]
+  boardState.value = new Game()
+  currentPlayer.value = boardState.value.players[0]
 }
 
 const groupedCurrentPlayerDices = computed(() =>
@@ -43,13 +26,30 @@ const groupedCurrentPlayerDices = computed(() =>
     {} as { [key: string]: Dice[] }
   )
 )
+
+const rollDices = () => {
+  currentPlayer.value.rollAllDices()
+}
 </script>
 
 <template>
   <main>
     <button @click="onNewGame">Nouvelle partie</button>
-    <div>River</div>
-    <div>Dice Throwing area</div>
+    <div class="river">
+      <span class="debug">River</span>
+      <EventCard v-for="card in boardState.river" :key="card.id" :event="card" />
+    </div>
+    <div class="dice-throwing-area">
+      <span class="debug">Dice Throwing area</span>
+      <div class="dice-result">
+        <component
+          v-for="dice in currentPlayer.dices.filter((dice) => dice.currentSideRolled)"
+          :key="dice.id"
+          :is="diceSymbolToComponent(dice.currentSideRolled!!)"
+        />
+      </div>
+      <button @click="rollDices">Lancer les dés</button>
+    </div>
     <div class="player-board">
       <span class="debug">Board</span>
       <div>
@@ -72,6 +72,29 @@ const groupedCurrentPlayerDices = computed(() =>
 </template>
 
 <style scoped lang="scss">
+.debug {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+}
+
+.river {
+  position: relative;
+  border: 1px solid black;
+  display: flex;
+}
+
+.dice-throwing-area {
+  width: 100%;
+  height: 300px;
+  position: relative;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 .player-board {
   --player-board-color: green;
 
@@ -83,9 +106,6 @@ const groupedCurrentPlayerDices = computed(() =>
   gap: 4px;
 
   .debug {
-    position: absolute;
-    top: 1px;
-    left: 1px;
     color: var(--player-board-color);
   }
 }

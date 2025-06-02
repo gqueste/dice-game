@@ -1,4 +1,4 @@
-import type { DiceSymbol } from '../dice/dice.interface'
+import type { DiceSymbol } from '../dice/dice.'
 import type { Age } from '../game.interface'
 
 export enum EffectType {

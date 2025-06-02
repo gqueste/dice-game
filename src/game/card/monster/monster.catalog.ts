@@ -1,4 +1,4 @@
-import { DiceSymbol } from '@/game/dice/dice.interface'
+import { DiceSymbol } from '@/game/dice/dice.'
 import type { Monster } from './monster.interface'
 import { v4 as uuid } from 'uuid'
 import { Age } from '@/game/game.interface'
