@@ -4,7 +4,11 @@
       <div
         v-for="level in character.levels"
         class="level"
-        :class="{ 'is-current-level': level?.level === character.currentLevel }"
+        :class="{
+          'is-current-level': level?.level === character.currentLevel,
+          activable,
+          activated,
+        }"
         :key="level?.level"
       >
         <div class="current-level-check">{{ level?.levelUpCost }}</div>
@@ -29,19 +33,23 @@ import { diceSymbolToComponent, effectTypeToComponent } from './utils'
 import { ArrowBigDown } from 'lucide-vue-next'
 import PlayableCard from './PlayableCard.vue'
 
-defineProps<{ character: Character }>()
+defineProps<{ character: Character; activable?: boolean; activated?: boolean }>()
 </script>
 
 <style lang="scss" scoped>
 .level {
+  --level-color: black;
+  --active-color: red;
+
   display: flex;
   flex-wrap: nowrap;
   gap: 12px;
   align-items: center;
   padding: 0 8px;
+  color: var(--level-color);
 
   .current-level-check {
-    border: 1px solid black;
+    border: 1px solid var(--level-color);
     width: 24px;
     height: 24px;
     display: flex;
@@ -52,7 +60,7 @@ defineProps<{ character: Character }>()
   }
 
   .required-dice {
-    border: 1px solid grey;
+    border: 1px solid var(--level-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -75,8 +83,19 @@ defineProps<{ character: Character }>()
 }
 
 .is-current-level {
-  border: 1px solid red;
+  border: 1px solid var(--active-color);
   border-radius: 4px;
   padding: 8px;
+
+  &.activable {
+    --level-color: var(--active-color);
+    border: 3px solid var(--active-color);
+  }
+
+  &.activated {
+    --level-color: white;
+    background-color: var(--active-color);
+    border: 3px solid var(--active-color);
+  }
 }
 </style>
