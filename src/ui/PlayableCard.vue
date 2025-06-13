@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" :class="{ hovered }">
     <div class="header">
       <div class="age-badge" :style="ageStyle">
         {{ ageToLabel(age) }}
@@ -26,7 +26,7 @@ import { ageToLabel, diceSymbolToComponent } from './utils'
 import type { DiceSymbol } from '@/game/dice/dice.'
 import { computed } from 'vue'
 
-const props = defineProps<{ age: Age; name: string; cost: DiceSymbol[] }>()
+const props = defineProps<{ age: Age; name: string; cost: DiceSymbol[]; hovered?: boolean }>()
 
 const ageStyle = computed<string>(() => {
   switch (props.age) {
@@ -58,13 +58,34 @@ const formattedCost = computed<{ [key: string]: DiceSymbol[] }>(() => {
 
 <style lang="scss" scoped>
 .card {
-  border: 1px solid black;
+  border: 6px solid black;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 250px;
   height: 400px;
   padding: 8px;
+  z-index: 1;
+  transform: rotateX(30deg);
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s,
+    z-index 0.3s;
+  background-color: white;
+
+  &:hover,
+  &.hovered {
+    z-index: 10;
+    transform: scale(1.1, 1);
+    cursor: pointer;
+    box-shadow:
+      rgba(0, 0, 0, 0.25) 0px 54px 55px,
+      rgba(0, 0, 0, 0.12) 0px -12px 30px,
+      rgba(0, 0, 0, 0.12) 0px 4px 6px,
+      rgba(0, 0, 0, 0.17) 0px 12px 13px,
+      rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  }
 
   .header {
     width: 100%;

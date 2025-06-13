@@ -5,7 +5,17 @@ import { defaultAttackCharacter } from '@/game/card/character/catalog/default/ch
 
 <template>
   <main>
-    <div class="characters">
+    <div class="cards">
+      <div>
+        <div>Default</div>
+        <CharacterCard :character="defaultAttackCharacter" />
+      </div>
+      <div>
+        <div>Hover</div>
+        <CharacterCard :character="defaultAttackCharacter" :activable="true" :hovered="true" />
+      </div>
+    </div>
+    <div class="cards">
       <div>
         <div>Default</div>
         <CharacterCard :character="defaultAttackCharacter" />
@@ -23,7 +33,7 @@ import { defaultAttackCharacter } from '@/game/card/character/catalog/default/ch
 </template>
 
 <style scoped lang="scss">
-.characters {
+.cards {
   display: flex;
   gap: 8px;
 }

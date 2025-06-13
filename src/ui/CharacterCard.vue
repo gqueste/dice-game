@@ -1,5 +1,10 @@
 <template>
-  <PlayableCard :age="character.age" :name="character.name" :cost="character.cost">
+  <PlayableCard
+    :age="character.age"
+    :name="character.name"
+    :cost="character.cost"
+    :hovered="hovered"
+  >
     <template v-slot:body>
       <div
         v-for="level in character.levels"
@@ -33,14 +38,14 @@ import { diceSymbolToComponent, effectTypeToComponent } from './utils'
 import { ArrowBigDown } from 'lucide-vue-next'
 import PlayableCard from './PlayableCard.vue'
 
-defineProps<{ character: Character; activable?: boolean; activated?: boolean }>()
+defineProps<{ character: Character; activable?: boolean; activated?: boolean; hovered?: boolean }>()
 </script>
 
 <style lang="scss" scoped>
 .level {
-  --level-color: black;
   --active-color: red;
 
+  --level-color: black;
   display: flex;
   flex-wrap: nowrap;
   gap: 12px;
@@ -96,6 +101,16 @@ defineProps<{ character: Character; activable?: boolean; activated?: boolean }>(
     --level-color: white;
     background-color: var(--active-color);
     border: 3px solid var(--active-color);
+
+    font-weight: bold;
+
+    .current-level-check {
+      border-width: 2px;
+    }
+
+    .required-dice {
+      border-width: 2px;
+    }
   }
 }
 </style>
