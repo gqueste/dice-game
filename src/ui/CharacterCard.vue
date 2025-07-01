@@ -3,7 +3,8 @@
     :age="character.age"
     :name="character.name"
     :cost="character.cost"
-    :hovered="hovered"
+    :hovered
+    :buyable
   >
     <template v-slot:body>
       <div
@@ -38,7 +39,13 @@ import { diceSymbolToComponent, effectTypeToComponent } from './utils'
 import { ArrowBigDown } from 'lucide-vue-next'
 import PlayableCard from './PlayableCard.vue'
 
-defineProps<{ character: Character; activable?: boolean; activated?: boolean; hovered?: boolean }>()
+defineProps<{
+  character: Character
+  activable?: boolean
+  activated?: boolean
+  hovered?: boolean
+  buyable?: boolean
+}>()
 </script>
 
 <style lang="scss" scoped>

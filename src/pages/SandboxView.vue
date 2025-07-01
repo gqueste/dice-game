@@ -12,7 +12,17 @@ import { defaultAttackCharacter } from '@/game/card/character/catalog/default/ch
       </div>
       <div>
         <div>Hover</div>
-        <CharacterCard :character="defaultAttackCharacter" :activable="true" :hovered="true" />
+        <CharacterCard :character="defaultAttackCharacter" activable hovered />
+      </div>
+    </div>
+    <div class="cards">
+      <div>
+        <div>Buyable</div>
+        <CharacterCard :character="defaultAttackCharacter" buyable />
+      </div>
+      <div>
+        <div>Buyable + Hover</div>
+        <CharacterCard :character="defaultAttackCharacter" buyable hovered />
       </div>
     </div>
     <div class="cards">
@@ -22,11 +32,11 @@ import { defaultAttackCharacter } from '@/game/card/character/catalog/default/ch
       </div>
       <div>
         <div>Activable</div>
-        <CharacterCard :character="defaultAttackCharacter" :activable="true" />
+        <CharacterCard :character="defaultAttackCharacter" activable />
       </div>
       <div>
         <div>Activated</div>
-        <CharacterCard :character="defaultAttackCharacter" :activated="true" />
+        <CharacterCard :character="defaultAttackCharacter" activated />
       </div>
     </div>
   </main>
