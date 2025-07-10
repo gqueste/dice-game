@@ -24,3 +24,9 @@ export enum DiceSymbol {
   Gold = 'gold',
   Magic = 'magic',
 }
+
+export interface UsedDice {
+  diceId: string
+  cardId: string
+  location: 'board' | 'river'
+}

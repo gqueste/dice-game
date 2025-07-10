@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import type { Dice } from '@/game/dice/dice.'
+import type { Dice, DiceSymbol } from '@/game/dice/dice.'
 import CharacterCard from '@/ui/CharacterCard.vue'
 import { diceSymbolToComponent } from '@/ui/utils'
 import { computed, ref } from 'vue'
 import { Game } from '@/game/game'
 import EventCard from '@/ui/EventCard.vue'
+import { canActivateCharacter, isActivatedCharacter } from '@/game/card/character/character.utils'
+import type { Character } from '@/game/card/character/character.interface'
 
 const boardState = ref(new Game())
 const currentPlayer = ref(boardState.value.players[0])
@@ -13,6 +15,15 @@ const onNewGame = () => {
   boardState.value = new Game()
   currentPlayer.value = boardState.value.players[0]
 }
+
+const thrownDicesSymbols = computed(() =>
+  currentPlayer.value.dices.reduce((acc, dice) => {
+    if (!!dice.currentSideRolled) {
+      acc.push(dice.currentSideRolled)
+    }
+    return acc
+  }, [] as DiceSymbol[])
+)
 
 const groupedCurrentPlayerDices = computed(() =>
   currentPlayer.value.dices.reduce(
@@ -30,6 +41,38 @@ const groupedCurrentPlayerDices = computed(() =>
 const rollDices = () => {
   currentPlayer.value.rollAllDices()
 }
+
+const onCharacterCardClick = (card: Character) => {
+  //TODO diceUsed in UI
+  //TODO move in player (add composable) and test
+  //TODO make component for DiceSymbol and have a Used Status ou directement dans le template pour le moment ?
+  //TODO "mes Dés" essayer disposition comme dans Dice and Slice ?
+  if (
+    !canActivateCharacter(card, thrownDicesSymbols.value) ||
+    isActivatedCharacter(card, currentPlayer.value.usedDices)
+  ) {
+    return
+  }
+  const skill = card.levels[card.currentLevel]?.skill
+  if (!skill) {
+    return
+  }
+  for (const targetDice of skill.cost) {
+    const usedDice = currentPlayer.value.dices.find((dice) => dice.currentSideRolled === targetDice)
+    if (usedDice) {
+      currentPlayer.value.usedDices.push({
+        diceId: usedDice.id,
+        cardId: card.id,
+        location: 'board',
+      })
+    }
+  }
+}
+
+const isDiceUsed = (): boolean => {
+  //TODO
+  return false
+}
 </script>
 
 <template>
@@ -42,9 +85,11 @@ const rollDices = () => {
     <div class="dice-throwing-area">
       <span class="debug">Dice Throwing area</span>
       <div class="dice-result">
+        <!--TODO used-->
         <component
           v-for="dice in currentPlayer.dices.filter((dice) => dice.currentSideRolled)"
           :key="dice.id"
+          :used="isDiceUsed()"
           :is="diceSymbolToComponent(dice.currentSideRolled!!)"
         />
       </div>
@@ -66,7 +111,14 @@ const rollDices = () => {
           </span>
         </div>
       </div>
-      <CharacterCard v-for="card in currentPlayer.board" :key="card.id" :character="card" />
+      <CharacterCard
+        v-for="card in currentPlayer.board"
+        :key="card.id"
+        :character="card"
+        :activable="canActivateCharacter(card, thrownDicesSymbols)"
+        :activated="isActivatedCharacter(card, currentPlayer.usedDices)"
+        @click="onCharacterCardClick(card)"
+      />
     </div>
   </main>
 </template>
