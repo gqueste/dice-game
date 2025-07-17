@@ -1,45 +1,31 @@
 <script setup lang="ts">
-import type { Dice, DiceSymbol } from '@/game/dice/dice.'
+import type { DiceSymbol } from '@/game/dice/dice.'
 import CharacterCard from '@/ui/CharacterCard.vue'
 import { diceSymbolToComponent } from '@/ui/utils'
-import { computed, ref } from 'vue'
+import { computed, ref, type ComputedRef, type Ref } from 'vue'
 import { Game } from '@/game/game'
 import EventCard from '@/ui/EventCard.vue'
 import { canActivateCharacter, isActivatedCharacter } from '@/game/card/character/character.utils'
 import type { Character } from '@/game/card/character/character.interface'
 
-const boardState = ref(new Game())
-const currentPlayer = ref(boardState.value.players[0])
+const game: Ref<Game> = ref(new Game())
 
 const onNewGame = () => {
-  boardState.value = new Game()
-  currentPlayer.value = boardState.value.players[0]
+  game.value = new Game()
 }
 
-const thrownDicesSymbols = computed(() =>
-  currentPlayer.value.dices.reduce((acc, dice) => {
-    if (!!dice.currentSideRolled) {
-      acc.push(dice.currentSideRolled)
-    }
-    return acc
-  }, [] as DiceSymbol[])
-)
-
-const groupedCurrentPlayerDices = computed(() =>
-  currentPlayer.value.dices.reduce(
-    (acc, currentDice) => {
-      if (!acc[currentDice.id]) {
-        acc[currentDice.id] = []
+const thrownDicesSymbols: ComputedRef<DiceSymbol[]> = computed(
+  () =>
+    game.value.getCurrentPlayer()?.dices.reduce((acc, dice) => {
+      if (!!dice.currentSideRolled) {
+        acc.push(dice.currentSideRolled)
       }
-      acc[currentDice.id].push(currentDice)
       return acc
-    },
-    {} as { [key: string]: Dice[] }
-  )
+    }, [] as DiceSymbol[]) || []
 )
 
 const rollDices = () => {
-  currentPlayer.value.rollAllDices()
+  game.value.getCurrentPlayer()?.rollAllDices()
 }
 
 const onCharacterCardClick = (card: Character) => {
@@ -49,7 +35,7 @@ const onCharacterCardClick = (card: Character) => {
   //TODO "mes Dés" essayer disposition comme dans Dice and Slice ?
   if (
     !canActivateCharacter(card, thrownDicesSymbols.value) ||
-    isActivatedCharacter(card, currentPlayer.value.usedDices)
+    isActivatedCharacter(card, game.value.getCurrentPlayer()?.usedDices || [])
   ) {
     return
   }
@@ -58,9 +44,11 @@ const onCharacterCardClick = (card: Character) => {
     return
   }
   for (const targetDice of skill.cost) {
-    const usedDice = currentPlayer.value.dices.find((dice) => dice.currentSideRolled === targetDice)
+    const usedDice = game.value
+      .getCurrentPlayer()
+      ?.dices.find((dice) => dice.currentSideRolled === targetDice)
     if (usedDice) {
-      currentPlayer.value.usedDices.push({
+      game.value.getCurrentPlayer()?.usedDices.push({
         diceId: usedDice.id,
         cardId: card.id,
         location: 'board',
@@ -80,14 +68,14 @@ const isDiceUsed = (): boolean => {
     <button @click="onNewGame">Nouvelle partie</button>
     <div class="river">
       <span class="debug">River</span>
-      <EventCard v-for="card in boardState.river" :key="card.id" :event="card" />
+      <EventCard v-for="card in game.river" :key="card.id" :event="card" />
     </div>
     <div class="dice-throwing-area">
       <span class="debug">Dice Throwing area</span>
       <div class="dice-result">
         <!--TODO used-->
         <component
-          v-for="dice in currentPlayer.dices.filter((dice) => dice.currentSideRolled)"
+          v-for="dice in game.getCurrentPlayer()?.dices.filter((dice) => dice.currentSideRolled)"
           :key="dice.id"
           :used="isDiceUsed()"
           :is="diceSymbolToComponent(dice.currentSideRolled!!)"
@@ -100,11 +88,17 @@ const isDiceUsed = (): boolean => {
       <div>
         <div>Game info</div>
         <div>Mes dés</div>
-        <div v-for="key in Object.keys(groupedCurrentPlayerDices)" :key class="dice-details-line">
-          <span class="quantity">{{ groupedCurrentPlayerDices[key].length }}</span>
+        <div
+          v-for="key in Object.keys(game.getCurrentPlayer()?.getDicesGroupedByType() || {})"
+          :key
+          class="dice-details-line"
+        >
+          <span class="quantity">{{
+            (game.getCurrentPlayer()?.getDicesGroupedByType() || {})[key].length
+          }}</span>
           <span>
             <component
-              v-for="side in groupedCurrentPlayerDices[key][0].sides"
+              v-for="side in (game.getCurrentPlayer()?.getDicesGroupedByType() || {})[key][0].sides"
               :key="side"
               :is="diceSymbolToComponent(side)"
             />
@@ -112,11 +106,11 @@ const isDiceUsed = (): boolean => {
         </div>
       </div>
       <CharacterCard
-        v-for="card in currentPlayer.board"
+        v-for="card in game.getCurrentPlayer()?.board"
         :key="card.id"
         :character="card"
         :activable="canActivateCharacter(card, thrownDicesSymbols)"
-        :activated="isActivatedCharacter(card, currentPlayer.usedDices)"
+        :activated="isActivatedCharacter(card, game.getCurrentPlayer()?.usedDices || [])"
         @click="onCharacterCardClick(card)"
       />
     </div>

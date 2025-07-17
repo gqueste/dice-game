@@ -22,4 +22,19 @@ export class Player {
   rollAllDices() {
     this.dices.forEach((dice) => dice.roll())
   }
+
+  getDicesGroupedByType(): { [key: string]: Dice[] } {
+    //TODO does not work here
+    //add type to dice and filter on that
+    return this.dices.reduce(
+      (acc, currentDice) => {
+        if (!acc[currentDice.id]) {
+          acc[currentDice.id] = []
+        }
+        acc[currentDice.id].push(currentDice)
+        return acc
+      },
+      {} as { [key: string]: Dice[] }
+    )
+  }
 }

@@ -8,15 +8,18 @@ export class Game {
   library: Event[]
   players: Player[]
   river: Event[]
+  currentPlayerId: string
 
   constructor() {
+    const player1 = new Player('player0', 'Joueur 1')
     this.currentAge = Age.First
     this.library = allEvents
-    this.players = [new Player('player0', 'Joueur 1')]
+    this.players = [player1]
     this.river = []
     for (let i = 0; i < 5; i++) {
       this.river.push(this.drawFromLibrary())
     }
+    this.currentPlayerId = player1.id
   }
 
   drawFromLibrary(): Event {
@@ -26,5 +29,9 @@ export class Game {
     const randomValue = Math.floor(Math.random() * this.library.length)
     const removed = this.library.splice(randomValue, 1)
     return removed[0]
+  }
+
+  getCurrentPlayer(): Player | undefined {
+    return this.players.find((player) => player.id === this.currentPlayerId)
   }
 }
