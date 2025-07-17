@@ -26,6 +26,27 @@ export class Character extends PlayableCard {
     this.currentLevel = config.currentLevel
     this.levels = config.levels
   }
+
+  isActivable = (availableDices: DiceSymbol[]): boolean => {
+    if (availableDices.length === 0) {
+      return false
+    }
+    const skill = this.levels[this.currentLevel]?.skill
+    if (!skill) {
+      return false
+    }
+    const dices = [...availableDices]
+
+    for (const targetDice of skill.cost) {
+      const index = dices.findIndex((dice) => dice === targetDice)
+      if (index > -1) {
+        dices.splice(index, 1)
+      } else {
+        return false
+      }
+    }
+    return true
+  }
 }
 
 export enum Level {

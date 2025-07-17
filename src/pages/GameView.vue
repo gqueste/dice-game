@@ -5,7 +5,6 @@ import { diceSymbolToComponent } from '@/ui/utils'
 import { ref, type Ref } from 'vue'
 import { Game } from '@/game/game'
 import EventCard from '@/ui/EventCard.vue'
-import { canActivateCharacter, isActivatedCharacter } from '@/game/card/character/character.utils'
 import type { Character } from '@/game/card/character/character'
 
 const game: Ref<Game> = ref(new Game())
@@ -23,10 +22,7 @@ const onCharacterCardClick = (card: Character) => {
   //TODO move in player (add composable) and test
   //TODO make component for DiceSymbol and have a Used Status ou directement dans le template pour le moment ?
   //TODO "mes Dés" essayer disposition comme dans Dice and Slice ?
-  if (
-    !canActivateCharacter(card, game.value.getCurrentPlayer()?.getThrownDicesSymbols() || []) ||
-    isActivatedCharacter(card, game.value.getCurrentPlayer()?.usedDices || [])
-  ) {
+  if (!game.value.getCurrentPlayer()?.canActivateCharacter(card)) {
     return
   }
   const skill = card.levels[card.currentLevel]?.skill
@@ -101,10 +97,8 @@ const isDiceUsed = (): boolean => {
         v-for="card in game.getCurrentPlayer()?.board"
         :key="card.id"
         :character="card"
-        :activable="
-          canActivateCharacter(card, game.getCurrentPlayer()?.getThrownDicesSymbols() || [])
-        "
-        :activated="isActivatedCharacter(card, game.getCurrentPlayer()?.usedDices || [])"
+        :activable="game.getCurrentPlayer()?.canActivateCharacter(card)"
+        :activated="game.getCurrentPlayer()?.hasActivatedCharacter(card)"
         @click="onCharacterCardClick(card)"
       />
     </div>

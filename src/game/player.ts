@@ -50,4 +50,15 @@ export class Player {
       }, [] as DiceSymbol[]) || []
     )
   }
+
+  hasActivatedCharacter(character: Character): boolean {
+    return !!this.usedDices.find((usedDice) => character.id === usedDice.cardId)
+  }
+
+  canActivateCharacter(character: Character): boolean {
+    //TODO virer les dés qui ont déjà été utilisés
+    return (
+      !this.hasActivatedCharacter(character) && character.isActivable(this.getThrownDicesSymbols())
+    )
+  }
 }

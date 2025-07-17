@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { Player } from './player'
 import { DiceSymbol, DiceType } from './dice/dice.'
 import { AttackDice, DefaultDice, GoldDice, MagicDice } from './dice/dice.catalog'
+import { getDefaultAttackCharacter } from './card/character/catalog/default/character-default-attack'
 
 describe('Player', () => {
   beforeEach(() => {
@@ -66,6 +67,30 @@ describe('Player', () => {
       const player = new Player('id', 'name')
       player.dices = [new DefaultDice(), new AttackDice()]
       expect(player.getThrownDicesSymbols()).toEqual([])
+    })
+  })
+
+  describe('hasActivatedCharacter', () => {
+    test('should return false if no dice exist', () => {
+      const character = getDefaultAttackCharacter()
+      const player = new Player('id', 'name')
+      player.board = [character]
+      player.usedDices = []
+      expect(player.hasActivatedCharacter(character)).toEqual(false)
+    })
+    test('should return false if no dice is affected to the card', () => {
+      const character = getDefaultAttackCharacter()
+      const player = new Player('id', 'name')
+      player.board = [character]
+      player.usedDices = [{ cardId: 'id', diceId: 'id', location: 'board' }]
+      expect(player.hasActivatedCharacter(character)).toEqual(false)
+    })
+    test('should return true if a dice is affected to the card', () => {
+      const character = getDefaultAttackCharacter()
+      const player = new Player('id', 'name')
+      player.board = [character]
+      player.usedDices = [{ cardId: character.id, diceId: 'id', location: 'board' }]
+      expect(player.hasActivatedCharacter(character)).toEqual(true)
     })
   })
 })
