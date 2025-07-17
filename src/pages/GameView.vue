@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DiceSymbol } from '@/game/dice/dice.'
+import type { DiceSymbol, DiceType } from '@/game/dice/dice.'
 import CharacterCard from '@/ui/CharacterCard.vue'
 import { diceSymbolToComponent } from '@/ui/utils'
 import { computed, ref, type ComputedRef, type Ref } from 'vue'
@@ -94,11 +94,13 @@ const isDiceUsed = (): boolean => {
           class="dice-details-line"
         >
           <span class="quantity">{{
-            (game.getCurrentPlayer()?.getDicesGroupedByType() || {})[key].length
+            (game.getCurrentPlayer()?.getDicesGroupedByType() || {})[key as DiceType]?.length
           }}</span>
           <span>
             <component
-              v-for="side in (game.getCurrentPlayer()?.getDicesGroupedByType() || {})[key][0].sides"
+              v-for="side in ((game.getCurrentPlayer()?.getDicesGroupedByType() || {})[
+                key as DiceType
+              ] || [])[0].sides"
               :key="side"
               :is="diceSymbolToComponent(side)"
             />

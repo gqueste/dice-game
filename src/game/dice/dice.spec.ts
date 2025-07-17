@@ -1,14 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
-import { Dice, DiceSymbol } from './dice.'
+import { Dice, DiceSymbol, DiceType } from './dice.'
 
-const testDice: Dice = new Dice('id0', [
-  DiceSymbol.Blank,
-  DiceSymbol.Blank,
-  DiceSymbol.Blank,
-  DiceSymbol.Attack,
-  DiceSymbol.Gold,
-  DiceSymbol.Magic,
-])
+const testDice: Dice = new Dice('id0', DiceType.Default)
 
 describe('dice.utils', () => {
   describe('rollDice', () => {

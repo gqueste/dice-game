@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { Player } from './player'
-import { DiceSymbol } from './dice/dice.'
+import { DiceSymbol, DiceType } from './dice/dice.'
+import { AttackDice, DefaultDice, GoldDice, MagicDice } from './dice/dice.catalog'
 
 describe('Player', () => {
   beforeEach(() => {
@@ -20,6 +21,27 @@ describe('Player', () => {
         DiceSymbol.Blank,
       ])
       expect(randomSpy).toHaveBeenCalledTimes(3)
+    })
+  })
+
+  describe('getDicesGroupedByType', () => {
+    test('should group all player dices by type', () => {
+      const player = new Player('id', 'name')
+      player.dices = [
+        new AttackDice(),
+        new DefaultDice(),
+        new GoldDice(),
+        new DefaultDice(),
+        new MagicDice(),
+        new AttackDice(),
+        new AttackDice(),
+      ]
+      expect(player.getDicesGroupedByType()).toEqual({
+        [DiceType.Attack]: [player.dices[0], player.dices[5], player.dices[6]],
+        [DiceType.Default]: [player.dices[1], player.dices[3]],
+        [DiceType.Gold]: [player.dices[2]],
+        [DiceType.Magic]: [player.dices[4]],
+      })
     })
   })
 })

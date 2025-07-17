@@ -1,80 +1,44 @@
-import { Dice, DiceSymbol } from './dice.'
+import { Dice, DiceType } from './dice.'
 import { v4 as uuid } from 'uuid'
 
 export class DefaultDice extends Dice {
   constructor() {
-    super(uuid(), [
-      DiceSymbol.Blank,
-      DiceSymbol.Blank,
-      DiceSymbol.Blank,
-      DiceSymbol.Attack,
-      DiceSymbol.Gold,
-      DiceSymbol.Magic,
-    ])
+    super(uuid(), DiceType.Default)
   }
 }
 
 export class AttackDice extends Dice {
   constructor() {
-    super(uuid(), [
-      DiceSymbol.Blank,
-      DiceSymbol.Attack,
-      DiceSymbol.Attack,
-      DiceSymbol.Attack,
-      DiceSymbol.Gold,
-      DiceSymbol.Magic,
-    ])
+    super(uuid(), DiceType.Attack)
   }
 }
 
 export class AttackerDice extends Dice {
   constructor() {
-    super(uuid(), [
-      DiceSymbol.Blank,
-      DiceSymbol.Attack,
-      DiceSymbol.Attack,
-      DiceSymbol.Attack,
-      DiceSymbol.Attack,
-      DiceSymbol.Magic,
-    ])
+    super(uuid(), DiceType.Attacker)
+  }
+}
+
+export class GoldDice extends Dice {
+  constructor() {
+    super(uuid(), DiceType.Gold)
   }
 }
 
 export class GolderDice extends Dice {
   constructor() {
-    super(uuid(), [
-      DiceSymbol.Blank,
-      DiceSymbol.Gold,
-      DiceSymbol.Gold,
-      DiceSymbol.Attack,
-      DiceSymbol.Gold,
-      DiceSymbol.Gold,
-    ])
+    super(uuid(), DiceType.Golder)
   }
 }
 
 export class MagicDice extends Dice {
   constructor() {
-    super(uuid(), [
-      DiceSymbol.Blank,
-      DiceSymbol.Magic,
-      DiceSymbol.Magic,
-      DiceSymbol.Attack,
-      DiceSymbol.Gold,
-      DiceSymbol.Magic,
-    ])
+    super(uuid(), DiceType.Magic)
   }
 }
 
 export class MagicerDice extends Dice {
   constructor() {
-    super(uuid(), [
-      DiceSymbol.Blank,
-      DiceSymbol.Magic,
-      DiceSymbol.Magic,
-      DiceSymbol.Magic,
-      DiceSymbol.Gold,
-      DiceSymbol.Magic,
-    ])
+    super(uuid(), DiceType.Magicer)
   }
 }

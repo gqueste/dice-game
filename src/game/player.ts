@@ -3,7 +3,7 @@ import { defaultGoldCharacter } from './card/character/catalog/default/character
 import { defaultMagicCharacter } from './card/character/catalog/default/character-default-magic'
 import type { Character } from './card/character/character.interface'
 import { DefaultDice } from './dice/dice.catalog'
-import type { Dice, UsedDice } from './dice/dice.'
+import type { Dice, DiceType, UsedDice } from './dice/dice.'
 
 export class Player {
   board: Character[]
@@ -23,18 +23,16 @@ export class Player {
     this.dices.forEach((dice) => dice.roll())
   }
 
-  getDicesGroupedByType(): { [key: string]: Dice[] } {
-    //TODO does not work here
-    //add type to dice and filter on that
+  getDicesGroupedByType(): { [key in DiceType]: Dice[] } {
     return this.dices.reduce(
       (acc, currentDice) => {
-        if (!acc[currentDice.id]) {
-          acc[currentDice.id] = []
+        if (!acc[currentDice.type]) {
+          acc[currentDice.type] = []
         }
-        acc[currentDice.id].push(currentDice)
+        acc[currentDice.type].push(currentDice)
         return acc
       },
-      {} as { [key: string]: Dice[] }
+      {} as { [key in DiceType]: Dice[] }
     )
   }
 }
