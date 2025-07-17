@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import type { CardEffect } from '@/game/card/card.interface'
+import type { CardEffect } from '@/game/card/card'
 import { effectTypeToComponent } from './utils'
 
 defineProps<{ effect: CardEffect }>()

@@ -1,7 +1,7 @@
 import { DiceSymbol } from '@/game/dice/dice.'
 import { Box, CircleDollarSign, Sparkles, Swords, X } from 'lucide-vue-next'
 import { type Component } from 'vue'
-import { EffectType } from '@/game/card/card.interface'
+import { EffectType } from '@/game/card/card'
 import { Age } from '@/game/game.interface'
 import AddAttackDice from './effectTypes/AddAttackDice.vue'
 import AddGoldDice from './effectTypes/AddGoldDice.vue'

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import CharacterCard from '@/ui/CharacterCard.vue'
-import { defaultAttackCharacter } from '@/game/card/character/catalog/default/character-default-attack'
+import { getDefaultAttackCharacter } from '@/game/card/character/catalog/default/character-default-attack'
+import { ref, type Ref } from 'vue'
+import type { Character } from '@/game/card/character/character'
+
+const character: Ref<Character> = ref(getDefaultAttackCharacter())
 </script>
 
 <template>
@@ -8,35 +12,35 @@ import { defaultAttackCharacter } from '@/game/card/character/catalog/default/ch
     <div class="cards">
       <div>
         <div>Default</div>
-        <CharacterCard :character="defaultAttackCharacter" />
+        <CharacterCard :character="character" />
       </div>
       <div>
         <div>Hover</div>
-        <CharacterCard :character="defaultAttackCharacter" activable hovered />
+        <CharacterCard :character="character" activable hovered />
       </div>
     </div>
     <div class="cards">
       <div>
         <div>Buyable</div>
-        <CharacterCard :character="defaultAttackCharacter" buyable />
+        <CharacterCard :character="character" buyable />
       </div>
       <div>
         <div>Buyable + Hover</div>
-        <CharacterCard :character="defaultAttackCharacter" buyable hovered />
+        <CharacterCard :character="character" buyable hovered />
       </div>
     </div>
     <div class="cards">
       <div>
         <div>Default</div>
-        <CharacterCard :character="defaultAttackCharacter" />
+        <CharacterCard :character="character" />
       </div>
       <div>
         <div>Activable</div>
-        <CharacterCard :character="defaultAttackCharacter" activable />
+        <CharacterCard :character="character" activable />
       </div>
       <div>
         <div>Activated</div>
-        <CharacterCard :character="defaultAttackCharacter" activated />
+        <CharacterCard :character="character" activated />
       </div>
     </div>
   </main>

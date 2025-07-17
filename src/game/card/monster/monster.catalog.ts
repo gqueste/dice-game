@@ -2,7 +2,7 @@ import { DiceSymbol } from '@/game/dice/dice.'
 import type { Monster } from './monster.interface'
 import { v4 as uuid } from 'uuid'
 import { Age } from '@/game/game.interface'
-import { EffectType } from '../card.interface'
+import { EffectType } from '../card'
 
 export const rabbit: Monster = {
   id: uuid(),

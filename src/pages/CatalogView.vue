@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { defaultAttackCharacter } from '../game/card/character/catalog/default/character-default-attack'
-import { defaultGoldCharacter } from '../game/card/character/catalog/default/character-default-gold'
-import { defaultMagicCharacter } from '../game/card/character/catalog/default/character-default-magic'
+import { getDefaultAttackCharacter } from '../game/card/character/catalog/default/character-default-attack'
+import { getDefaultGoldCharacter } from '../game/card/character/catalog/default/character-default-gold'
+import { getDefaultMagicCharacter } from '../game/card/character/catalog/default/character-default-magic'
 import { rabbit, ghost, thief, dragon } from '@/game/card/monster/monster.catalog'
 import CharacterCard from '../ui/CharacterCard.vue'
 import MonsterCard from '../ui/MonsterCard.vue'
@@ -12,9 +12,9 @@ import { allEvents } from '../game/card/event/event.catalog'
 <template>
   <main>
     <div class="wrapper">
-      <CharacterCard :character="defaultAttackCharacter" />
-      <CharacterCard :character="defaultGoldCharacter" />
-      <CharacterCard :character="defaultMagicCharacter" />
+      <CharacterCard :character="getDefaultAttackCharacter()" />
+      <CharacterCard :character="getDefaultGoldCharacter()" />
+      <CharacterCard :character="getDefaultMagicCharacter()" />
     </div>
     <div class="wrapper">
       <MonsterCard :monster="rabbit" />

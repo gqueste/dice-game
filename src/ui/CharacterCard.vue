@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Character } from '@/game/card/character/character.interface'
+import type { Character } from '@/game/card/character/character'
 import { diceSymbolToComponent, effectTypeToComponent } from './utils'
 import { ArrowBigDown } from 'lucide-vue-next'
 import PlayableCard from './PlayableCard.vue'

@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import type { RiverCard } from '@/game/card/card.interface'
+import type { RiverCard } from '@/game/card/card'
 import { ArrowDownToLine, Hand, RefreshCw, Skull } from 'lucide-vue-next'
 import RiverCardEffect from './RiverCardEffect.vue'
 

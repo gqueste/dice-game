@@ -1,5 +1,5 @@
 import type { DiceSymbol, UsedDice } from '@/game/dice/dice.'
-import type { Character } from './character.interface'
+import type { Character } from './character'
 
 export const canActivateCharacter = (
   character: Character,

@@ -1,7 +1,7 @@
-import { defaultAttackCharacter } from './card/character/catalog/default/character-default-attack'
-import { defaultGoldCharacter } from './card/character/catalog/default/character-default-gold'
-import { defaultMagicCharacter } from './card/character/catalog/default/character-default-magic'
-import type { Character } from './card/character/character.interface'
+import { getDefaultAttackCharacter } from './card/character/catalog/default/character-default-attack'
+import { getDefaultGoldCharacter } from './card/character/catalog/default/character-default-gold'
+import { getDefaultMagicCharacter } from './card/character/catalog/default/character-default-magic'
+import type { Character } from './card/character/character'
 import { DefaultDice } from './dice/dice.catalog'
 import type { Dice, DiceSymbol, DiceType, UsedDice } from './dice/dice.'
 
@@ -14,7 +14,11 @@ export class Player {
   constructor(id: string, name: string) {
     this.id = id
     this.name = name
-    this.board = [defaultAttackCharacter, defaultGoldCharacter, defaultMagicCharacter]
+    this.board = [
+      getDefaultAttackCharacter(),
+      getDefaultGoldCharacter(),
+      getDefaultMagicCharacter(),
+    ]
     this.dices = [new DefaultDice(), new DefaultDice(), new DefaultDice()]
     this.usedDices = []
   }

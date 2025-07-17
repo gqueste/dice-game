@@ -6,7 +6,7 @@ import { ref, type Ref } from 'vue'
 import { Game } from '@/game/game'
 import EventCard from '@/ui/EventCard.vue'
 import { canActivateCharacter, isActivatedCharacter } from '@/game/card/character/character.utils'
-import type { Character } from '@/game/card/character/character.interface'
+import type { Character } from '@/game/card/character/character'
 
 const game: Ref<Game> = ref(new Game())
 

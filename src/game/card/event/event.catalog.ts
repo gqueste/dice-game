@@ -2,7 +2,7 @@ import { DiceSymbol } from '@/game/dice/dice.'
 import type { Event } from './event.interface'
 import { v4 as uuid } from 'uuid'
 import { Age } from '@/game/game.interface'
-import { EffectType } from '../card.interface'
+import { EffectType } from '../card'
 
 export const market: Event = {
   id: uuid(),
