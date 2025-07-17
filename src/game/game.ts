@@ -13,7 +13,7 @@ export class Game {
   constructor() {
     const player1 = new Player('player0', 'Joueur 1')
     this.currentAge = Age.First
-    this.library = allEvents
+    this.library = [...allEvents]
     this.players = [player1]
     this.river = []
     for (let i = 0; i < 5; i++) {
