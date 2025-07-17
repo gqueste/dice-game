@@ -44,4 +44,28 @@ describe('Player', () => {
       })
     })
   })
+
+  describe('getThrownDicesSymbols', () => {
+    test('should return thrown symbols', () => {
+      const player = new Player('id', 'name')
+      const dice0 = new DefaultDice()
+      dice0.currentSideRolled = DiceSymbol.Blank
+      const dice1 = new DefaultDice()
+      dice1.currentSideRolled = DiceSymbol.Attack
+      player.dices = [dice0, dice1]
+      expect(player.getThrownDicesSymbols()).toEqual([DiceSymbol.Blank, DiceSymbol.Attack])
+    })
+
+    test('should return [] if no dices', () => {
+      const player = new Player('id', 'name')
+      player.dices = []
+      expect(player.getThrownDicesSymbols()).toEqual([])
+    })
+
+    test('should return [] if no dices thrown', () => {
+      const player = new Player('id', 'name')
+      player.dices = [new DefaultDice(), new AttackDice()]
+      expect(player.getThrownDicesSymbols()).toEqual([])
+    })
+  })
 })

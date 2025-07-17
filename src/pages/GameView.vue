@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { DiceSymbol, DiceType } from '@/game/dice/dice.'
+import type { DiceType } from '@/game/dice/dice.'
 import CharacterCard from '@/ui/CharacterCard.vue'
 import { diceSymbolToComponent } from '@/ui/utils'
-import { computed, ref, type ComputedRef, type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { Game } from '@/game/game'
 import EventCard from '@/ui/EventCard.vue'
 import { canActivateCharacter, isActivatedCharacter } from '@/game/card/character/character.utils'
@@ -14,16 +14,6 @@ const onNewGame = () => {
   game.value = new Game()
 }
 
-const thrownDicesSymbols: ComputedRef<DiceSymbol[]> = computed(
-  () =>
-    game.value.getCurrentPlayer()?.dices.reduce((acc, dice) => {
-      if (!!dice.currentSideRolled) {
-        acc.push(dice.currentSideRolled)
-      }
-      return acc
-    }, [] as DiceSymbol[]) || []
-)
-
 const rollDices = () => {
   game.value.getCurrentPlayer()?.rollAllDices()
 }
@@ -34,7 +24,7 @@ const onCharacterCardClick = (card: Character) => {
   //TODO make component for DiceSymbol and have a Used Status ou directement dans le template pour le moment ?
   //TODO "mes Dés" essayer disposition comme dans Dice and Slice ?
   if (
-    !canActivateCharacter(card, thrownDicesSymbols.value) ||
+    !canActivateCharacter(card, game.value.getCurrentPlayer()?.getThrownDicesSymbols() || []) ||
     isActivatedCharacter(card, game.value.getCurrentPlayer()?.usedDices || [])
   ) {
     return
@@ -111,7 +101,9 @@ const isDiceUsed = (): boolean => {
         v-for="card in game.getCurrentPlayer()?.board"
         :key="card.id"
         :character="card"
-        :activable="canActivateCharacter(card, thrownDicesSymbols)"
+        :activable="
+          canActivateCharacter(card, game.getCurrentPlayer()?.getThrownDicesSymbols() || [])
+        "
         :activated="isActivatedCharacter(card, game.getCurrentPlayer()?.usedDices || [])"
         @click="onCharacterCardClick(card)"
       />

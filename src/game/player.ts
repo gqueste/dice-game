@@ -3,7 +3,7 @@ import { defaultGoldCharacter } from './card/character/catalog/default/character
 import { defaultMagicCharacter } from './card/character/catalog/default/character-default-magic'
 import type { Character } from './card/character/character.interface'
 import { DefaultDice } from './dice/dice.catalog'
-import type { Dice, DiceType, UsedDice } from './dice/dice.'
+import type { Dice, DiceSymbol, DiceType, UsedDice } from './dice/dice.'
 
 export class Player {
   board: Character[]
@@ -33,6 +33,17 @@ export class Player {
         return acc
       },
       {} as { [key in DiceType]: Dice[] }
+    )
+  }
+
+  getThrownDicesSymbols(): DiceSymbol[] {
+    return (
+      this.dices.reduce((acc, dice) => {
+        if (!!dice.currentSideRolled) {
+          acc.push(dice.currentSideRolled)
+        }
+        return acc
+      }, [] as DiceSymbol[]) || []
     )
   }
 }
