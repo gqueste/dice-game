@@ -93,4 +93,105 @@ describe('Player', () => {
       expect(player.hasActivatedCharacter(character)).toEqual(true)
     })
   })
+
+  describe('isDiceAvailable', () => {
+    test('should return false if dice is not in the pool', () => {
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      player.dices = []
+      player.usedDices = []
+      expect(player.isDiceAvailable(dice)).toEqual(false)
+    })
+    test('should return false if dice has been used', () => {
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      player.dices = [dice]
+      player.usedDices = [{ cardId: 'id', diceId: dice.id, location: 'board' }]
+      expect(player.isDiceAvailable(dice)).toEqual(false)
+    })
+    test('should return false if dice has not been rolled', () => {
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      dice.currentSideRolled = null
+      player.dices = [dice]
+      player.usedDices = []
+      expect(player.isDiceAvailable(dice)).toEqual(false)
+    })
+    test('should return true if dice is available', () => {
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      dice.currentSideRolled = dice.sides[0]
+      player.dices = [dice]
+      player.usedDices = []
+      expect(player.isDiceAvailable(dice)).toEqual(true)
+    })
+  })
+
+  describe('getAvailableDices', () => {
+    test('should return none if no dice in the pool', () => {
+      const player = new Player('id', 'name')
+      player.dices = []
+      player.usedDices = []
+      expect(player.getAvailableDices()).toEqual([])
+    })
+    test('should return none if dice are used', () => {
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      player.dices = [dice]
+      player.usedDices = [{ cardId: 'id', diceId: dice.id, location: 'board' }]
+      expect(player.getAvailableDices()).toEqual([])
+    })
+    test('should return none if dice have not been rolled', () => {
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      dice.currentSideRolled = null
+      player.dices = [dice]
+      player.usedDices = []
+      expect(player.getAvailableDices()).toEqual([])
+    })
+    test('should return availables dices', () => {
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      dice.currentSideRolled = dice.sides[0]
+      player.dices = [dice]
+      player.usedDices = []
+      expect(player.getAvailableDices()).toEqual([dice])
+    })
+  })
+
+  describe('canActivateCharacter', () => {
+    test('should return false if character is not in player board', () => {
+      const character = getDefaultAttackCharacter()
+      const player = new Player('id', 'name')
+      player.board = []
+      expect(player.canActivateCharacter(character)).toEqual(false)
+    })
+    test('should return false if character has been activated', () => {
+      const character = getDefaultAttackCharacter()
+      const player = new Player('id', 'name')
+      player.board = [character]
+      player.usedDices = [{ cardId: character.id, diceId: 'id', location: 'board' }]
+      expect(player.canActivateCharacter(character)).toEqual(false)
+    })
+    test('should return false if there are not enough symbols to activate', () => {
+      const character = getDefaultAttackCharacter()
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      player.board = [character]
+      player.dices = [dice]
+      player.usedDices = []
+      expect(player.canActivateCharacter(character)).toEqual(false)
+    })
+    test('should return true if there are enough symbols to activate', () => {
+      const character = getDefaultAttackCharacter()
+      const player = new Player('id', 'name')
+      const dice0 = new DefaultDice()
+      dice0.currentSideRolled = DiceSymbol.Attack
+      const dice1 = new DefaultDice()
+      player.board = [character]
+      player.dices = [dice0, dice1]
+      player.usedDices = []
+      expect(player.canActivateCharacter(character)).toEqual(true)
+    })
+  })
 })

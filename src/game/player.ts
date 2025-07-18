@@ -55,10 +55,23 @@ export class Player {
     return !!this.usedDices.find((usedDice) => character.id === usedDice.cardId)
   }
 
-  canActivateCharacter(character: Character): boolean {
-    //TODO virer les dés qui ont déjà été utilisés
+  isDiceAvailable(dice: Dice): boolean {
     return (
-      !this.hasActivatedCharacter(character) && character.isActivable(this.getThrownDicesSymbols())
+      !!this.dices.find((d) => d.id === dice.id) &&
+      !this.usedDices.find((usedDice) => usedDice.diceId === dice.id) &&
+      !!dice.currentSideRolled
+    )
+  }
+
+  getAvailableDices(): Dice[] {
+    return this.dices.filter((dice) => this.isDiceAvailable(dice))
+  }
+
+  canActivateCharacter(character: Character): boolean {
+    return (
+      !!this.board.find((char) => char.id === character.id) &&
+      !this.hasActivatedCharacter(character) &&
+      character.isActivable(this.getAvailableDices().map((dice) => dice.currentSideRolled!))
     )
   }
 }
