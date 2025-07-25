@@ -3,6 +3,7 @@ import { Player } from './player'
 import { DiceSymbol, DiceType } from './dice/dice.'
 import { AttackDice, DefaultDice, GoldDice, MagicDice } from './dice/dice.catalog'
 import { getDefaultAttackCharacter } from './card/character/catalog/default/character-default-attack'
+import { Level } from './card/character/character'
 
 describe('Player', () => {
   beforeEach(() => {
@@ -192,6 +193,77 @@ describe('Player', () => {
       player.dices = [dice0, dice1]
       player.usedDices = []
       expect(player.canActivateCharacter(character)).toEqual(true)
+    })
+  })
+
+  describe('activateCharacter', () => {
+    test('should not activate if is already activated', () => {
+      const character = getDefaultAttackCharacter()
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      player.board = [character]
+      player.usedDices = [{ cardId: character.id, diceId: dice.id, location: 'board' }]
+
+      player.activateCharacter(character)
+
+      expect(player.usedDices).toEqual([
+        { cardId: character.id, diceId: dice.id, location: 'board' },
+      ])
+    })
+    test('should not activate if no corresponding dice', () => {
+      const character = getDefaultAttackCharacter()
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      dice.currentSideRolled = DiceSymbol.Blank
+      player.board = [character]
+      player.usedDices = []
+
+      player.activateCharacter(character)
+
+      expect(player.usedDices).toEqual([])
+    })
+    test('should activate and allocate dices', () => {
+      const character = getDefaultAttackCharacter()
+      character.currentLevel = Level.Level2
+      character.levels[Level.Level2]!.skill.cost = [DiceSymbol.Attack, DiceSymbol.Attack]
+      const player = new Player('id', 'name')
+      const dice0 = new DefaultDice()
+      dice0.currentSideRolled = DiceSymbol.Attack
+      const dice1 = new DefaultDice()
+      dice1.currentSideRolled = DiceSymbol.Blank
+      const dice2 = new DefaultDice()
+      dice2.currentSideRolled = DiceSymbol.Attack
+      const dice3 = new DefaultDice()
+      dice3.currentSideRolled = DiceSymbol.Attack
+      player.board = [character]
+      player.dices = [dice0, dice1, dice2, dice3]
+      player.usedDices = [{ cardId: 'fakeId', diceId: dice0.id, location: 'board' }]
+
+      player.activateCharacter(character)
+
+      expect(player.usedDices).toEqual([
+        { cardId: 'fakeId', diceId: dice0.id, location: 'board' },
+        { cardId: character.id, diceId: dice2.id, location: 'board' },
+        { cardId: character.id, diceId: dice3.id, location: 'board' },
+      ])
+    })
+  })
+
+  describe('isDiceUsed', () => {
+    test('should return false if dice is not used', () => {
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      player.dices = [dice]
+
+      expect(player.isDiceUsed(dice)).toEqual(false)
+    })
+    test('should return true if dice is used', () => {
+      const player = new Player('id', 'name')
+      const dice = new DefaultDice()
+      player.dices = [dice]
+      player.usedDices = [{ cardId: 'id', diceId: dice.id, location: 'board' }]
+
+      expect(player.isDiceUsed(dice)).toEqual(true)
     })
   })
 })

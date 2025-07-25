@@ -3,12 +3,13 @@ import { getDefaultAttackCharacter } from './catalog/default/character-default-a
 import { DiceSymbol } from '@/game/dice/dice.'
 import { Level, type Character } from './character'
 
+let character: Character
+
 describe('Character', () => {
+  beforeEach(() => {
+    character = getDefaultAttackCharacter()
+  })
   describe('isActivable', () => {
-    let character: Character
-    beforeEach(() => {
-      character = getDefaultAttackCharacter()
-    })
     test('should be false if no dices available', () => {
       expect(character.isActivable([])).toEqual(false)
     })
@@ -28,6 +29,20 @@ describe('Character', () => {
       expect(
         character.isActivable([DiceSymbol.Attack, DiceSymbol.Attack, DiceSymbol.Magic])
       ).toEqual(true)
+    })
+  })
+
+  describe('getCurrentSkillCost', () => {
+    test('should return empty array if no skill', () => {
+      character.levels = {}
+      expect(character.getCurrentSkillCost()).toEqual([])
+    })
+    test('should return empty array if no skill for this level', () => {
+      delete character.levels[Level.Level1]
+      expect(character.getCurrentSkillCost()).toEqual([])
+    })
+    test('should return array with correspondig skill dice symbols', () => {
+      expect(character.getCurrentSkillCost()).toEqual([DiceSymbol.Attack])
     })
   })
 })

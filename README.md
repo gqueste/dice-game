@@ -8,6 +8,7 @@
 
 ## TODO
 
+- "mes Dés" try display like in Dice and Slice ?
 - after roll, highlight cards which can be bought
 - highlight board actions available
 - add total in dice throwing after actions

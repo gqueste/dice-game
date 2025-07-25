@@ -58,7 +58,7 @@ export class Player {
   isDiceAvailable(dice: Dice): boolean {
     return (
       !!this.dices.find((d) => d.id === dice.id) &&
-      !this.usedDices.find((usedDice) => usedDice.diceId === dice.id) &&
+      !this.isDiceUsed(dice) &&
       !!dice.currentSideRolled
     )
   }
@@ -73,5 +73,29 @@ export class Player {
       !this.hasActivatedCharacter(character) &&
       character.isActivable(this.getAvailableDices().map((dice) => dice.currentSideRolled!))
     )
+  }
+
+  activateCharacter(character: Character) {
+    const allocateDiceForTargetDiceSymbol = (diceSymbol: DiceSymbol) => {
+      const correspondingDice = this.getAvailableDices().find(
+        (dice) => dice.currentSideRolled === diceSymbol
+      )
+      if (correspondingDice) {
+        this.usedDices.push({
+          cardId: character.id,
+          diceId: correspondingDice.id,
+          location: 'board',
+        })
+      }
+    }
+
+    if (this.canActivateCharacter(character)) {
+      const cost = character.getCurrentSkillCost()
+      cost.forEach(allocateDiceForTargetDiceSymbol)
+    }
+  }
+
+  isDiceUsed(dice: Dice): boolean {
+    return !!this.usedDices.find((used) => used.diceId === dice.id)
   }
 }

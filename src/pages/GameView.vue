@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DiceType } from '@/game/dice/dice.'
+import type { Dice, DiceType } from '@/game/dice/dice.'
 import CharacterCard from '@/ui/CharacterCard.vue'
 import { diceSymbolToComponent } from '@/ui/utils'
 import { ref, type Ref } from 'vue'
@@ -18,34 +18,14 @@ const rollDices = () => {
 }
 
 const onCharacterCardClick = (card: Character) => {
+  game.value.getCurrentPlayer()?.activateCharacter(card)
   //TODO diceUsed in UI
   //TODO move in player (add composable) and test
   //TODO make component for DiceSymbol and have a Used Status ou directement dans le template pour le moment ?
-  //TODO "mes Dés" essayer disposition comme dans Dice and Slice ?
-  if (!game.value.getCurrentPlayer()?.canActivateCharacter(card)) {
-    return
-  }
-  const skill = card.levels[card.currentLevel]?.skill
-  if (!skill) {
-    return
-  }
-  for (const targetDice of skill.cost) {
-    const usedDice = game.value
-      .getCurrentPlayer()
-      ?.dices.find((dice) => dice.currentSideRolled === targetDice)
-    if (usedDice) {
-      game.value.getCurrentPlayer()?.usedDices.push({
-        diceId: usedDice.id,
-        cardId: card.id,
-        location: 'board',
-      })
-    }
-  }
 }
 
-const isDiceUsed = (): boolean => {
-  //TODO
-  return false
+const isDiceUsed = (dice: Dice): boolean => {
+  return !!game.value.getCurrentPlayer()?.isDiceUsed(dice)
 }
 </script>
 
@@ -63,7 +43,7 @@ const isDiceUsed = (): boolean => {
         <component
           v-for="dice in game.getCurrentPlayer()?.dices.filter((dice) => dice.currentSideRolled)"
           :key="dice.id"
-          :used="isDiceUsed()"
+          :class="{ 'dice-used': isDiceUsed(dice) }"
           :is="diceSymbolToComponent(dice.currentSideRolled!!)"
         />
       </div>

@@ -27,7 +27,7 @@ export class Character extends PlayableCard {
     this.levels = config.levels
   }
 
-  isActivable = (availableDices: DiceSymbol[]): boolean => {
+  isActivable(availableDices: DiceSymbol[]): boolean {
     if (availableDices.length === 0) {
       return false
     }
@@ -46,6 +46,14 @@ export class Character extends PlayableCard {
       }
     }
     return true
+  }
+
+  getCurrentSkillCost(): DiceSymbol[] {
+    const skill = this.levels[this.currentLevel]?.skill
+    if (!skill) {
+      return []
+    }
+    return skill.cost
   }
 }
 
