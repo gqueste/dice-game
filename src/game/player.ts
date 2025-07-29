@@ -3,14 +3,38 @@ import { getDefaultGoldCharacter } from './card/character/catalog/default/charac
 import { getDefaultMagicCharacter } from './card/character/catalog/default/character-default-magic'
 import type { Character } from './card/character/character'
 import { DefaultDice } from './dice/dice.catalog'
-import type { Dice, DiceSymbol, DiceType, UsedDice } from './dice/dice.'
+import type { Dice, DiceSymbol, DiceType, UsedSymbol } from './dice/dice.'
+import { v4 as uuid } from 'uuid'
+
+export class RolledSymbol {
+  id: string
+  symbol: DiceSymbol
+  parentCharacter?: string
+  parentDice?: string
+
+  constructor({
+    symbol,
+    parentCharacter,
+    parentDice,
+  }: {
+    symbol: DiceSymbol
+    parentCharacter?: string
+    parentDice?: string
+  }) {
+    this.id = uuid()
+    this.symbol = symbol
+    this.parentCharacter = parentCharacter
+    this.parentDice = parentDice
+  }
+}
 
 export class Player {
   board: Character[]
   dices: Dice[]
   id: string
   name: string
-  usedDices: UsedDice[]
+  usedSymbols: UsedSymbol[]
+  rolledSymbols: RolledSymbol[]
   constructor(id: string, name: string) {
     this.id = id
     this.name = name
@@ -19,12 +43,19 @@ export class Player {
       getDefaultGoldCharacter(),
       getDefaultMagicCharacter(),
     ]
+    this.rolledSymbols = []
     this.dices = [new DefaultDice(), new DefaultDice(), new DefaultDice()]
-    this.usedDices = []
+    this.usedSymbols = []
   }
 
   rollAllDices() {
+    this.rolledSymbols = []
     this.dices.forEach((dice) => dice.roll())
+    this.dices.forEach((dice) => {
+      this.rolledSymbols.push(
+        new RolledSymbol({ symbol: dice.currentSideRolled!, parentDice: dice.id })
+      )
+    })
   }
 
   getDicesGroupedByType(): { [key in DiceType]: Dice[] } {
@@ -40,50 +71,40 @@ export class Player {
     )
   }
 
-  getThrownDicesSymbols(): DiceSymbol[] {
-    return (
-      this.dices.reduce((acc, dice) => {
-        if (!!dice.currentSideRolled) {
-          acc.push(dice.currentSideRolled)
-        }
-        return acc
-      }, [] as DiceSymbol[]) || []
-    )
-  }
-
   hasActivatedCharacter(character: Character): boolean {
-    return !!this.usedDices.find((usedDice) => character.id === usedDice.cardId)
+    return !!this.usedSymbols.find((usedSymbol) => character.id === usedSymbol.cardId)
   }
 
-  isDiceAvailable(dice: Dice): boolean {
+  isRolledSymbolAvailable(rolledSymbol: RolledSymbol): boolean {
     return (
-      !!this.dices.find((d) => d.id === dice.id) &&
-      !this.isDiceUsed(dice) &&
-      !!dice.currentSideRolled
+      !!this.rolledSymbols.find((s) => s.id === rolledSymbol.id) &&
+      !this.isRolledSymbolUsed(rolledSymbol)
     )
   }
 
-  getAvailableDices(): Dice[] {
-    return this.dices.filter((dice) => this.isDiceAvailable(dice))
+  getAvailableRolledSymbols(): RolledSymbol[] {
+    return this.rolledSymbols.filter((symbol) => this.isRolledSymbolAvailable(symbol))
   }
 
   canActivateCharacter(character: Character): boolean {
     return (
       !!this.board.find((char) => char.id === character.id) &&
       !this.hasActivatedCharacter(character) &&
-      character.isActivable(this.getAvailableDices().map((dice) => dice.currentSideRolled!))
+      character.isActivable(
+        this.getAvailableRolledSymbols().map((rolledSymbol) => rolledSymbol.symbol)
+      )
     )
   }
 
   activateCharacter(character: Character) {
-    const allocateDiceForTargetDiceSymbol = (diceSymbol: DiceSymbol) => {
-      const correspondingDice = this.getAvailableDices().find(
-        (dice) => dice.currentSideRolled === diceSymbol
+    const allocateRolledSymbolForTargetDiceSymbol = (diceSymbol: DiceSymbol) => {
+      const correspondingDice = this.getAvailableRolledSymbols().find(
+        (rolledSymbol) => rolledSymbol.symbol === diceSymbol
       )
       if (correspondingDice) {
-        this.usedDices.push({
+        this.usedSymbols.push({
           cardId: character.id,
-          diceId: correspondingDice.id,
+          symbolId: correspondingDice.id,
           location: 'board',
         })
       }
@@ -91,13 +112,13 @@ export class Player {
 
     if (this.canActivateCharacter(character)) {
       const cost = character.getCurrentSkillCost()
-      cost.forEach(allocateDiceForTargetDiceSymbol)
+      cost.forEach(allocateRolledSymbolForTargetDiceSymbol)
     } else {
       throw new Error(`player ${this.id} can not activate character ${character.id}`)
     }
   }
 
-  isDiceUsed(dice: Dice): boolean {
-    return !!this.usedDices.find((used) => used.diceId === dice.id)
+  isRolledSymbolUsed(rolledSymbol: RolledSymbol): boolean {
+    return !!this.usedSymbols.find((used) => used.symbolId === rolledSymbol.id)
   }
 }

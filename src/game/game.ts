@@ -55,7 +55,6 @@ export class Game {
     switch (skill.effect.type) {
       case EffectType.AddAttack:
         //add attack symbol to player rolled Symbols
-        //TODO change player to have distinct dicePool and sidesRolledPool
         break
 
       default:

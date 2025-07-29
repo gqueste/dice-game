@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Dice, DiceType } from '@/game/dice/dice.'
+import type { DiceType } from '@/game/dice/dice.'
 import CharacterCard from '@/ui/CharacterCard.vue'
 import { diceSymbolToComponent } from '@/ui/utils'
 import { ref, type Ref } from 'vue'
@@ -7,6 +7,7 @@ import { Game } from '@/game/game'
 import EventCard from '@/ui/EventCard.vue'
 import type { Character } from '@/game/card/character/character'
 import DiceSide from '@/ui/DiceSide.vue'
+import type { RolledSymbol } from '@/game/player'
 
 const game: Ref<Game> = ref(new Game())
 
@@ -19,12 +20,11 @@ const rollDices = () => {
 }
 
 const onCharacterCardClick = (card: Character) => {
-  game.value.getCurrentPlayer()?.activateCharacter(card)
   game.value.activateCharacterForPlayer(game.value.getCurrentPlayer()!, card)
 }
 
-const isDiceUsed = (dice: Dice): boolean => {
-  return !!game.value.getCurrentPlayer()?.isDiceUsed(dice)
+const isRolledSymbolUsed = (rolledSymbol: RolledSymbol): boolean => {
+  return !!game.value.getCurrentPlayer()?.isRolledSymbolUsed(rolledSymbol)
 }
 </script>
 
@@ -39,10 +39,10 @@ const isDiceUsed = (dice: Dice): boolean => {
       <span class="debug">Dice Throwing area</span>
       <div class="dice-result">
         <DiceSide
-          v-for="dice in game.getCurrentPlayer()?.dices.filter((dice) => dice.currentSideRolled)"
-          :key="dice.id"
-          :symbol="dice.currentSideRolled!"
-          :used="isDiceUsed(dice)"
+          v-for="rolledSymbol in game.getCurrentPlayer()?.rolledSymbols"
+          :key="rolledSymbol.id"
+          :symbol="rolledSymbol.symbol!"
+          :used="isRolledSymbolUsed(rolledSymbol)"
         />
       </div>
       <button @click="rollDices">Lancer les dés</button>

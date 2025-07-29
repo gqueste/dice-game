@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { Player } from './player'
+import { Player, RolledSymbol } from './player'
 import { DiceSymbol, DiceType } from './dice/dice.'
 import { AttackDice, DefaultDice, GoldDice, MagicDice } from './dice/dice.catalog'
 import { getDefaultAttackCharacter } from './card/character/catalog/default/character-default-attack'
@@ -47,116 +47,74 @@ describe('Player', () => {
     })
   })
 
-  describe('getThrownDicesSymbols', () => {
-    test('should return thrown symbols', () => {
-      const player = new Player('id', 'name')
-      const dice0 = new DefaultDice()
-      dice0.currentSideRolled = DiceSymbol.Blank
-      const dice1 = new DefaultDice()
-      dice1.currentSideRolled = DiceSymbol.Attack
-      player.dices = [dice0, dice1]
-      expect(player.getThrownDicesSymbols()).toEqual([DiceSymbol.Blank, DiceSymbol.Attack])
-    })
-
-    test('should return [] if no dices', () => {
-      const player = new Player('id', 'name')
-      player.dices = []
-      expect(player.getThrownDicesSymbols()).toEqual([])
-    })
-
-    test('should return [] if no dices thrown', () => {
-      const player = new Player('id', 'name')
-      player.dices = [new DefaultDice(), new AttackDice()]
-      expect(player.getThrownDicesSymbols()).toEqual([])
-    })
-  })
-
   describe('hasActivatedCharacter', () => {
-    test('should return false if no dice exist', () => {
+    test('should return false if no symbol exist', () => {
       const character = getDefaultAttackCharacter()
       const player = new Player('id', 'name')
       player.board = [character]
-      player.usedDices = []
+      player.rolledSymbols = []
       expect(player.hasActivatedCharacter(character)).toEqual(false)
     })
-    test('should return false if no dice is affected to the card', () => {
+    test('should return false if no symbol is affected to the card', () => {
       const character = getDefaultAttackCharacter()
       const player = new Player('id', 'name')
       player.board = [character]
-      player.usedDices = [{ cardId: 'id', diceId: 'id', location: 'board' }]
+      player.usedSymbols = [{ cardId: 'id', symbolId: 'id', location: 'board' }]
       expect(player.hasActivatedCharacter(character)).toEqual(false)
     })
-    test('should return true if a dice is affected to the card', () => {
+    test('should return true if a symbol is affected to the card', () => {
       const character = getDefaultAttackCharacter()
       const player = new Player('id', 'name')
       player.board = [character]
-      player.usedDices = [{ cardId: character.id, diceId: 'id', location: 'board' }]
+      player.usedSymbols = [{ cardId: character.id, symbolId: 'id', location: 'board' }]
       expect(player.hasActivatedCharacter(character)).toEqual(true)
     })
   })
 
-  describe('isDiceAvailable', () => {
-    test('should return false if dice is not in the pool', () => {
+  describe('isRolledSymbolAvailable', () => {
+    test('should return false if symbol is not in the pool', () => {
       const player = new Player('id', 'name')
-      const dice = new DefaultDice()
-      player.dices = []
-      player.usedDices = []
-      expect(player.isDiceAvailable(dice)).toEqual(false)
+      const symbol = new RolledSymbol({ symbol: DiceSymbol.Attack })
+      player.rolledSymbols = []
+      player.usedSymbols = []
+      expect(player.isRolledSymbolAvailable(symbol)).toEqual(false)
     })
-    test('should return false if dice has been used', () => {
+    test('should return false if symbol has been used', () => {
       const player = new Player('id', 'name')
-      const dice = new DefaultDice()
-      player.dices = [dice]
-      player.usedDices = [{ cardId: 'id', diceId: dice.id, location: 'board' }]
-      expect(player.isDiceAvailable(dice)).toEqual(false)
+      const symbol = new RolledSymbol({ symbol: DiceSymbol.Attack })
+      player.rolledSymbols = [symbol]
+      player.usedSymbols = [{ cardId: 'id', symbolId: symbol.id, location: 'board' }]
+      expect(player.isRolledSymbolAvailable(symbol)).toEqual(false)
     })
-    test('should return false if dice has not been rolled', () => {
+    test('should return true if symbol is available', () => {
       const player = new Player('id', 'name')
-      const dice = new DefaultDice()
-      dice.currentSideRolled = null
-      player.dices = [dice]
-      player.usedDices = []
-      expect(player.isDiceAvailable(dice)).toEqual(false)
-    })
-    test('should return true if dice is available', () => {
-      const player = new Player('id', 'name')
-      const dice = new DefaultDice()
-      dice.currentSideRolled = dice.sides[0]
-      player.dices = [dice]
-      player.usedDices = []
-      expect(player.isDiceAvailable(dice)).toEqual(true)
+      const symbol = new RolledSymbol({ symbol: DiceSymbol.Attack })
+      player.rolledSymbols = [symbol]
+      player.usedSymbols = []
+      expect(player.isRolledSymbolAvailable(symbol)).toEqual(true)
     })
   })
 
-  describe('getAvailableDices', () => {
-    test('should return none if no dice in the pool', () => {
+  describe('getAvailableRolledSymbols', () => {
+    test('should return none if no symbol in the pool', () => {
       const player = new Player('id', 'name')
       player.dices = []
-      player.usedDices = []
-      expect(player.getAvailableDices()).toEqual([])
+      player.usedSymbols = []
+      expect(player.getAvailableRolledSymbols()).toEqual([])
     })
-    test('should return none if dice are used', () => {
+    test('should return none if symbol are used', () => {
       const player = new Player('id', 'name')
-      const dice = new DefaultDice()
-      player.dices = [dice]
-      player.usedDices = [{ cardId: 'id', diceId: dice.id, location: 'board' }]
-      expect(player.getAvailableDices()).toEqual([])
+      const symbol = new RolledSymbol({ symbol: DiceSymbol.Attack })
+      player.rolledSymbols = [symbol]
+      player.usedSymbols = [{ cardId: 'id', symbolId: symbol.id, location: 'board' }]
+      expect(player.getAvailableRolledSymbols()).toEqual([])
     })
-    test('should return none if dice have not been rolled', () => {
+    test('should return availables symbols', () => {
       const player = new Player('id', 'name')
-      const dice = new DefaultDice()
-      dice.currentSideRolled = null
-      player.dices = [dice]
-      player.usedDices = []
-      expect(player.getAvailableDices()).toEqual([])
-    })
-    test('should return availables dices', () => {
-      const player = new Player('id', 'name')
-      const dice = new DefaultDice()
-      dice.currentSideRolled = dice.sides[0]
-      player.dices = [dice]
-      player.usedDices = []
-      expect(player.getAvailableDices()).toEqual([dice])
+      const symbol = new RolledSymbol({ symbol: DiceSymbol.Attack })
+      player.rolledSymbols = [symbol]
+      player.usedSymbols = []
+      expect(player.getAvailableRolledSymbols()).toEqual([symbol])
     })
   })
 
@@ -171,27 +129,27 @@ describe('Player', () => {
       const character = getDefaultAttackCharacter()
       const player = new Player('id', 'name')
       player.board = [character]
-      player.usedDices = [{ cardId: character.id, diceId: 'id', location: 'board' }]
+      player.usedSymbols = [{ cardId: character.id, symbolId: 'id', location: 'board' }]
       expect(player.canActivateCharacter(character)).toEqual(false)
     })
     test('should return false if there are not enough symbols to activate', () => {
       const character = getDefaultAttackCharacter()
       const player = new Player('id', 'name')
-      const dice = new DefaultDice()
+      const symbol = new RolledSymbol({ symbol: DiceSymbol.Blank })
       player.board = [character]
-      player.dices = [dice]
-      player.usedDices = []
+      player.rolledSymbols = [symbol]
+      player.usedSymbols = []
       expect(player.canActivateCharacter(character)).toEqual(false)
     })
     test('should return true if there are enough symbols to activate', () => {
       const character = getDefaultAttackCharacter()
       const player = new Player('id', 'name')
-      const dice0 = new DefaultDice()
-      dice0.currentSideRolled = DiceSymbol.Attack
-      const dice1 = new DefaultDice()
+      const symbol0 = new RolledSymbol({ symbol: DiceSymbol.Attack })
+      const symbol1 = new RolledSymbol({ symbol: DiceSymbol.Blank })
+
       player.board = [character]
-      player.dices = [dice0, dice1]
-      player.usedDices = []
+      player.rolledSymbols = [symbol0, symbol1]
+      player.usedSymbols = []
       expect(player.canActivateCharacter(character)).toEqual(true)
     })
   })
@@ -200,69 +158,64 @@ describe('Player', () => {
     test('should throw error if is already activated', () => {
       const character = getDefaultAttackCharacter()
       const player = new Player('id', 'name')
-      const dice = new DefaultDice()
+      const symbol = new RolledSymbol({ symbol: DiceSymbol.Attack })
       player.board = [character]
-      player.usedDices = [{ cardId: character.id, diceId: dice.id, location: 'board' }]
+      player.usedSymbols = [{ cardId: character.id, symbolId: symbol.id, location: 'board' }]
 
       expect(() => player.activateCharacter(character)).toThrowError()
 
-      expect(player.usedDices).toEqual([
-        { cardId: character.id, diceId: dice.id, location: 'board' },
+      expect(player.usedSymbols).toEqual([
+        { cardId: character.id, symbolId: symbol.id, location: 'board' },
       ])
     })
-    test('should throw error if no corresponding dice', () => {
+    test('should throw error if no corresponding symbol', () => {
       const character = getDefaultAttackCharacter()
       const player = new Player('id', 'name')
-      const dice = new DefaultDice()
-      dice.currentSideRolled = DiceSymbol.Blank
       player.board = [character]
-      player.usedDices = []
+      player.rolledSymbols = []
+      player.usedSymbols = []
 
       expect(() => player.activateCharacter(character)).toThrowError()
-      expect(player.usedDices).toEqual([])
+      expect(player.usedSymbols).toEqual([])
     })
     test('should activate and allocate dices', () => {
       const character = getDefaultAttackCharacter()
       character.currentLevel = Level.Level2
       character.levels[Level.Level2]!.skill.cost = [DiceSymbol.Attack, DiceSymbol.Attack]
       const player = new Player('id', 'name')
-      const dice0 = new DefaultDice()
-      dice0.currentSideRolled = DiceSymbol.Attack
-      const dice1 = new DefaultDice()
-      dice1.currentSideRolled = DiceSymbol.Blank
-      const dice2 = new DefaultDice()
-      dice2.currentSideRolled = DiceSymbol.Attack
-      const dice3 = new DefaultDice()
-      dice3.currentSideRolled = DiceSymbol.Attack
+      const symbol0 = new RolledSymbol({ symbol: DiceSymbol.Attack })
+      const symbol1 = new RolledSymbol({ symbol: DiceSymbol.Blank })
+      const symbol2 = new RolledSymbol({ symbol: DiceSymbol.Attack })
+      const symbol3 = new RolledSymbol({ symbol: DiceSymbol.Attack })
       player.board = [character]
-      player.dices = [dice0, dice1, dice2, dice3]
-      player.usedDices = [{ cardId: 'fakeId', diceId: dice0.id, location: 'board' }]
+      player.rolledSymbols = [symbol0, symbol1, symbol2, symbol3]
+      player.usedSymbols = [{ cardId: 'fakeId', symbolId: symbol0.id, location: 'board' }]
 
       player.activateCharacter(character)
 
-      expect(player.usedDices).toEqual([
-        { cardId: 'fakeId', diceId: dice0.id, location: 'board' },
-        { cardId: character.id, diceId: dice2.id, location: 'board' },
-        { cardId: character.id, diceId: dice3.id, location: 'board' },
+      expect(player.usedSymbols).toEqual([
+        { cardId: 'fakeId', symbolId: symbol0.id, location: 'board' },
+        { cardId: character.id, symbolId: symbol2.id, location: 'board' },
+        { cardId: character.id, symbolId: symbol3.id, location: 'board' },
       ])
     })
   })
 
-  describe('isDiceUsed', () => {
-    test('should return false if dice is not used', () => {
+  describe('isRolledSymbolUsed', () => {
+    test('should return false if dice symbol is not used', () => {
       const player = new Player('id', 'name')
-      const dice = new DefaultDice()
-      player.dices = [dice]
+      const symbol = new RolledSymbol({ symbol: DiceSymbol.Attack })
+      player.rolledSymbols = [symbol]
 
-      expect(player.isDiceUsed(dice)).toEqual(false)
+      expect(player.isRolledSymbolUsed(symbol)).toEqual(false)
     })
-    test('should return true if dice is used', () => {
+    test('should return true if symbol dice is used', () => {
       const player = new Player('id', 'name')
-      const dice = new DefaultDice()
-      player.dices = [dice]
-      player.usedDices = [{ cardId: 'id', diceId: dice.id, location: 'board' }]
+      const symbol = new RolledSymbol({ symbol: DiceSymbol.Attack })
+      player.rolledSymbols = [symbol]
+      player.usedSymbols = [{ cardId: 'id', symbolId: symbol.id, location: 'board' }]
 
-      expect(player.isDiceUsed(dice)).toEqual(true)
+      expect(player.isRolledSymbolUsed(symbol)).toEqual(true)
     })
   })
 })

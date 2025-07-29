@@ -24,8 +24,8 @@ export enum DiceSymbol {
   Magic = 'magic',
 }
 
-export interface UsedDice {
-  diceId: string
+export interface UsedSymbol {
+  symbolId: string
   cardId: string
   location: 'board' | 'river'
 }
