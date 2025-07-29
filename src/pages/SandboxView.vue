@@ -3,6 +3,8 @@ import CharacterCard from '@/ui/CharacterCard.vue'
 import { getDefaultAttackCharacter } from '@/game/card/character/catalog/default/character-default-attack'
 import { ref, type Ref } from 'vue'
 import type { Character } from '@/game/card/character/character'
+import DiceSide from '@/ui/DiceSide.vue'
+import { DiceSymbol } from '@/game/dice/dice.'
 
 const character: Ref<Character> = ref(getDefaultAttackCharacter())
 </script>
@@ -41,6 +43,16 @@ const character: Ref<Character> = ref(getDefaultAttackCharacter())
       <div>
         <div>Activated</div>
         <CharacterCard :character="character" activated />
+      </div>
+    </div>
+    <div class="cards">
+      <div>
+        <div>Default</div>
+        <DiceSide :symbol="DiceSymbol.Attack" />
+      </div>
+      <div>
+        <div>Used</div>
+        <DiceSide :symbol="DiceSymbol.Attack" used />
       </div>
     </div>
   </main>

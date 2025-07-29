@@ -1,3 +1,5 @@
+import { EffectType } from './card/card'
+import type { Character } from './card/character/character'
 import { allEvents } from './card/event/event.catalog'
 import type { Event } from './card/event/event.interface'
 import { Age } from './game.interface'
@@ -33,5 +35,31 @@ export class Game {
 
   getCurrentPlayer(): Player | undefined {
     return this.players.find((player) => player.id === this.currentPlayerId)
+  }
+
+  activateCharacterForPlayer(player: Player, character: Character) {
+    try {
+      player.activateCharacter(character)
+      this.resolveCharacterEffect(character, player)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  resolveCharacterEffect(character: Character, caster: Player) {
+    console.log(caster)
+    const skill = character.getCurrentSkill()
+    if (!skill) {
+      return
+    }
+    switch (skill.effect.type) {
+      case EffectType.AddAttack:
+        //add attack symbol to player rolled Symbols
+        //TODO change player to have distinct dicePool and sidesRolledPool
+        break
+
+      default:
+        break
+    }
   }
 }

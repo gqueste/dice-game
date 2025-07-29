@@ -6,6 +6,7 @@ import { ref, type Ref } from 'vue'
 import { Game } from '@/game/game'
 import EventCard from '@/ui/EventCard.vue'
 import type { Character } from '@/game/card/character/character'
+import DiceSide from '@/ui/DiceSide.vue'
 
 const game: Ref<Game> = ref(new Game())
 
@@ -19,9 +20,7 @@ const rollDices = () => {
 
 const onCharacterCardClick = (card: Character) => {
   game.value.getCurrentPlayer()?.activateCharacter(card)
-  //TODO diceUsed in UI
-  //TODO move in player (add composable) and test
-  //TODO make component for DiceSymbol and have a Used Status ou directement dans le template pour le moment ?
+  game.value.activateCharacterForPlayer(game.value.getCurrentPlayer()!, card)
 }
 
 const isDiceUsed = (dice: Dice): boolean => {
@@ -39,12 +38,11 @@ const isDiceUsed = (dice: Dice): boolean => {
     <div class="dice-throwing-area">
       <span class="debug">Dice Throwing area</span>
       <div class="dice-result">
-        <!--TODO used-->
-        <component
+        <DiceSide
           v-for="dice in game.getCurrentPlayer()?.dices.filter((dice) => dice.currentSideRolled)"
           :key="dice.id"
-          :class="{ 'dice-used': isDiceUsed(dice) }"
-          :is="diceSymbolToComponent(dice.currentSideRolled!!)"
+          :symbol="dice.currentSideRolled!"
+          :used="isDiceUsed(dice)"
         />
       </div>
       <button @click="rollDices">Lancer les dés</button>

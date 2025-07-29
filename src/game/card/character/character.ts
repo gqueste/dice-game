@@ -31,7 +31,7 @@ export class Character extends PlayableCard {
     if (availableDices.length === 0) {
       return false
     }
-    const skill = this.levels[this.currentLevel]?.skill
+    const skill = this.getCurrentSkill()
     if (!skill) {
       return false
     }
@@ -48,8 +48,12 @@ export class Character extends PlayableCard {
     return true
   }
 
+  getCurrentSkill(): CharacterSkill | undefined {
+    return this.levels[this.currentLevel]?.skill
+  }
+
   getCurrentSkillCost(): DiceSymbol[] {
-    const skill = this.levels[this.currentLevel]?.skill
+    const skill = this.getCurrentSkill()
     if (!skill) {
       return []
     }

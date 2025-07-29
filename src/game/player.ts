@@ -92,6 +92,8 @@ export class Player {
     if (this.canActivateCharacter(character)) {
       const cost = character.getCurrentSkillCost()
       cost.forEach(allocateDiceForTargetDiceSymbol)
+    } else {
+      throw new Error(`player ${this.id} can not activate character ${character.id}`)
     }
   }
 

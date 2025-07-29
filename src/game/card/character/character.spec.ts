@@ -45,4 +45,23 @@ describe('Character', () => {
       expect(character.getCurrentSkillCost()).toEqual([DiceSymbol.Attack])
     })
   })
+  describe('getCurrentSkill', () => {
+    test('should return undefined if no skill', () => {
+      character.levels = {}
+      expect(character.getCurrentSkill()).toEqual(undefined)
+    })
+    test('should return undefined if no skill for this level', () => {
+      delete character.levels[Level.Level1]
+      expect(character.getCurrentSkill()).toEqual(undefined)
+    })
+    test('should return skill with correspondig skill dice symbols', () => {
+      expect(character.getCurrentSkill()).toEqual({
+        cost: ['attack'],
+        effect: {
+          type: 'addAttack',
+          value: 2,
+        },
+      })
+    })
+  })
 })

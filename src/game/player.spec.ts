@@ -197,20 +197,20 @@ describe('Player', () => {
   })
 
   describe('activateCharacter', () => {
-    test('should not activate if is already activated', () => {
+    test('should throw error if is already activated', () => {
       const character = getDefaultAttackCharacter()
       const player = new Player('id', 'name')
       const dice = new DefaultDice()
       player.board = [character]
       player.usedDices = [{ cardId: character.id, diceId: dice.id, location: 'board' }]
 
-      player.activateCharacter(character)
+      expect(() => player.activateCharacter(character)).toThrowError()
 
       expect(player.usedDices).toEqual([
         { cardId: character.id, diceId: dice.id, location: 'board' },
       ])
     })
-    test('should not activate if no corresponding dice', () => {
+    test('should throw error if no corresponding dice', () => {
       const character = getDefaultAttackCharacter()
       const player = new Player('id', 'name')
       const dice = new DefaultDice()
@@ -218,8 +218,7 @@ describe('Player', () => {
       player.board = [character]
       player.usedDices = []
 
-      player.activateCharacter(character)
-
+      expect(() => player.activateCharacter(character)).toThrowError()
       expect(player.usedDices).toEqual([])
     })
     test('should activate and allocate dices', () => {
