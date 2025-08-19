@@ -2,8 +2,10 @@ import { EffectType } from './card/card'
 import type { Character } from './card/character/character'
 import { allEvents } from './card/event/event.catalog'
 import type { Event } from './card/event/event.interface'
+import { DiceSymbol } from './dice/dice.'
 import { Age } from './game.interface'
 import { Player } from './player'
+import { v4 as uuid } from 'uuid'
 
 export class Game {
   currentAge: Age
@@ -46,19 +48,33 @@ export class Game {
     }
   }
 
+  addDiceSymbolForPlayer(diceSymbol: DiceSymbol, player: Player, character: Character) {
+    player.rolledSymbols.push({
+      id: uuid(),
+      symbol: diceSymbol,
+      parentCharacter: character.id,
+    })
+  }
+
   resolveCharacterEffect(character: Character, caster: Player) {
-    console.log(caster)
     const skill = character.getCurrentSkill()
     if (!skill) {
       return
     }
-    switch (skill.effect.type) {
-      case EffectType.AddAttack:
-        //add attack symbol to player rolled Symbols
-        break
-
-      default:
-        break
-    }
+    ;[...Array(skill.effect.value)].forEach(() => {
+      switch (skill.effect.type) {
+        case EffectType.AddAttack:
+          this.addDiceSymbolForPlayer(DiceSymbol.Attack, caster, character)
+          break
+        case EffectType.AddGold:
+          this.addDiceSymbolForPlayer(DiceSymbol.Gold, caster, character)
+          break
+        case EffectType.AddMagic:
+          this.addDiceSymbolForPlayer(DiceSymbol.Magic, caster, character)
+          break
+        default:
+          break
+      }
+    })
   }
 }

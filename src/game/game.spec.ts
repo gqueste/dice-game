@@ -1,6 +1,12 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { Game } from './game'
 import { allEvents } from './card/event/event.catalog'
+import * as uuid from 'uuid'
+import { DiceSymbol } from './dice/dice.'
+import { Player } from './player'
+import { Character, Level } from './card/character/character'
+import { Age } from './game.interface'
+import { EffectType } from './card/card'
 
 describe('Game', () => {
   beforeEach(() => {
@@ -36,6 +42,113 @@ describe('Game', () => {
       const card = game.drawFromLibrary()
       expect(card).toEqual(allEvents[0])
       expect(game.library).toEqual([allEvents[1]])
+    })
+  })
+
+  describe('addDiceSymbolForPlayer', () => {
+    test('should add symbol to rolledSymbols pool', () => {
+      vi.spyOn(uuid, 'v4').mockReturnValue('id')
+      const game: Game = new Game()
+      const player = new Player('playerId', 'name')
+      const character = new Character({
+        age: Age.First,
+        cost: [],
+        currentLevel: Level.Level1,
+        id: 'id',
+        name: 'name',
+        levels: {},
+      })
+      player.board = [character]
+      game.players = [player]
+      expect(player.rolledSymbols).toEqual([])
+      game.addDiceSymbolForPlayer(DiceSymbol.Attack, player, player.board[0]!)
+      expect(player.rolledSymbols).toEqual([
+        { id: 'id', parentCharacter: 'id', symbol: DiceSymbol.Attack },
+      ])
+    })
+  })
+
+  describe('resolveCharacterEffect', () => {
+    test('should add symbols to rolledSymbols pool', () => {
+      vi.spyOn(uuid, 'v4').mockReturnValue('id')
+      const game: Game = new Game()
+      const player = new Player('playerId', 'name')
+      const character = new Character({
+        age: Age.First,
+        cost: [],
+        currentLevel: Level.Level1,
+        id: 'id',
+        name: 'name',
+        levels: {
+          [Level.Level1]: {
+            level: Level.Level1,
+            levelUpCost: 0,
+            skill: {
+              cost: [DiceSymbol.Attack],
+              effect: {
+                type: EffectType.AddAttack,
+                value: 2,
+              },
+            },
+          },
+        },
+      })
+      player.board = [character]
+      game.players = [player]
+      expect(player.rolledSymbols).toEqual([])
+      game.resolveCharacterEffect(character, player)
+      expect(player.rolledSymbols).toEqual([
+        { id: 'id', parentCharacter: 'id', symbol: DiceSymbol.Attack },
+        { id: 'id', parentCharacter: 'id', symbol: DiceSymbol.Attack },
+      ])
+    })
+    test('should not add symbols if no skill', () => {
+      vi.spyOn(uuid, 'v4').mockReturnValue('id')
+      const game: Game = new Game()
+      const player = new Player('playerId', 'name')
+      const character = new Character({
+        age: Age.First,
+        cost: [],
+        currentLevel: Level.Level1,
+        id: 'id',
+        name: 'name',
+        levels: {},
+      })
+      player.board = [character]
+      game.players = [player]
+      expect(player.rolledSymbols).toEqual([])
+      game.resolveCharacterEffect(character, player)
+      expect(player.rolledSymbols).toEqual([])
+    })
+    test('should not add symbols if unknown effect', () => {
+      vi.spyOn(uuid, 'v4').mockReturnValue('id')
+      const game: Game = new Game()
+      const player = new Player('playerId', 'name')
+      const character = new Character({
+        age: Age.First,
+        cost: [],
+        currentLevel: Level.Level1,
+        id: 'id',
+        name: 'name',
+        levels: {
+          [Level.Level1]: {
+            level: Level.Level1,
+            levelUpCost: 0,
+            skill: {
+              cost: [DiceSymbol.Attack],
+              effect: {
+                type: 'unknown' as EffectType,
+                value: 2,
+              },
+            },
+          },
+        },
+      })
+      player.board = [character]
+      game.players = [player]
+      expect(player.rolledSymbols).toEqual([])
+      game.resolveCharacterEffect(character, player)
+      expect(player.rolledSymbols).toEqual([])
     })
   })
 })
